@@ -1,0 +1,130 @@
+@font-face {
+    font-family: 'SF Pro Display';
+    src: url(fonts/sf-pro-display/SFProDisplayBold.ttf);
+    font-weight: 700;
+}
+@font-face {
+    font-family: 'SF Pro Display';
+    src: url(fonts/sf-pro-display/SFProDisplayRegular.ttf);
+    font-weight: 400;
+}
+
+body {
+    background: var(--fp-theme-background, #FFFFFF);
+    user-select: none;
+}
+.page {
+    min-width: 335px;
+    max-width: 335px;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0 auto;
+    /*padding: 20px 20px;*/
+
+    font-family: 'SF Pro Display';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 18px;
+
+    color: #000000;
+}
+.title {
+    font-family: 'SF Pro Display';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 30px;
+    color: #8ECD52;
+    color: #f050f8;
+
+    margin: 0;
+}
+.description {
+    font-family: 'SF Pro Display';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 20px;
+    margin: 4px 0 0 0;
+
+    color: #000000;
+}
+
+.logo {
+    max-width: 150px;
+    width: 100%;
+    height: auto;
+}
+
+.form {
+    border: 1px solid #666666;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 25px 14px 46px;
+    margin-top: 25px;
+}
+.form input {
+    border: none;
+    border-bottom: 1px solid #898989;
+    margin-top: 30px;
+    background: transparent;
+
+    font-family: 'SF Pro Display';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 28px;
+    padding-bottom: 6px;
+    border-radius: 0;
+}
+
+.form input::placeholder {
+    color: #898989;
+}
+.form button[type=reset],
+.form button[type=submit] {
+    background: #2F6ABE;
+    background: #f050f8;
+    backdrop-filter: blur(2px);
+    border: none;
+    padding: 8px 12px;
+
+    font-family: 'SF Pro Display';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+
+    color: #FFFFFF;
+
+    flex: 1;
+    margin-top: 44px;
+}
+.form button[type=reset] {
+    background: none;
+    color: #000000;
+}
+.disclaimer {
+    margin-top: 25px;
+}
+.share-disclaimer {
+    font-size: 14px;
+    line-height: 17px;
+}
+p.additional {
+    color: rgba(77, 77, 77, 0.81);
+}
+.disclaimer a {
+    color: inherit;
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    column-gap: 8px;
+}

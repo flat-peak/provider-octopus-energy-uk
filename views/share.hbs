@@ -1,0 +1,54 @@
+<h1 class="title">Share your tariff</h1>
+<p class="description">Let your devices access your tariff rates</p>
+
+<div class="form">
+    <p>ManufacturerDisplayName wants to access your energy account</p>
+
+    <div class="share-disclaimer">
+        <p>This will allow ManufacturerDisplayName to:</p>
+        <ul>
+            <li>View your email address</li>
+            <li>View your account number</li>
+            <li>View your electricity tariff</li>
+        </ul>
+
+        <p>Make sure that you trust ManufacturerDisplayName</p>
+
+        <p class="additional">You may be sharing sensitive info with this site or app.  Learn about how ManufacturerDisplayName will handle your data by reviewing its privacy policies.  You can always see or remove access in your Dominion Energy account</p>
+    </div>
+
+    <div class="buttons">
+        <button type="reset">Cancel</button>
+        <button type="submit">Allow</button>
+    </div>
+
+    <script>
+        const callback = typeof window.respondToApp === 'function' ? window.respondToApp : console.log;
+
+        document.querySelector('button[type="reset"]').addEventListener('click', () => {
+           callback({object: 'error', type: 'user_reject'});
+        });
+
+        document.querySelector('button[type="submit"]').addEventListener('click', () => {
+            console.log('User click submit');
+            const token = sessionStorage.getItem('token');
+            if (!token) {
+                location.href = '/'
+                return;
+            }
+            fetch('/api/connect', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({token: token})
+            }).then((res) => res.json()).then((data) => {
+                if (data.tariff_plan) {
+                    callback(data)
+                } else {
+                    console.error(data.error)
+                }
+            })
+        });
+    </script>
+</div>

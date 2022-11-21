@@ -1,0 +1,160 @@
+{
+  "object": "tariff_plan",
+  "export": [
+    {
+      "data": [
+        {
+          "days_and_hours": [
+            {
+              "days": [
+                "All"
+              ],
+              "hours": [
+                {
+                  "cost": 3.252,
+                  "valid_from": "00:00:00",
+                  "valid_to": "05:30:00"
+                },
+                {
+                  "cost": 6,
+                  "valid_from": "05:30:00",
+                  "valid_to": "00:00:00"
+                }
+              ]
+            }
+          ],
+          "months": [
+            "All"
+          ]
+        }
+      ],
+      "type": "weekday"
+    }
+  ],
+  "import": [
+    {
+      "data": [
+        {
+          "days_and_hours": [
+            {
+              "days": [
+                "Mon",
+                "Tue",
+                "Wed",
+                "Thu",
+                "Fri"
+              ],
+              "hours": [
+                {
+                  "cost": 12.34,
+                  "valid_from": "00:00:00",
+                  "valid_to": "00:30:00"
+                },
+                {
+                  "cost": 2.34,
+                  "valid_from": "00:30:00",
+                  "valid_to": "03:30:00"
+                },
+                {
+                  "cost": 5.43,
+                  "valid_from": "03:30:00",
+                  "valid_to": "00:00:00"
+                }
+              ]
+            },
+            {
+              "days": [
+                "Sat",
+                "Sun"
+              ],
+              "hours": [
+                {
+                  "cost": 12.34,
+                  "valid_from": "00:00:00",
+                  "valid_to": "00:30:00"
+                },
+                {
+                  "cost": 5.43,
+                  "valid_from": "00:30:00",
+                  "valid_to": "03:30:00"
+                },
+                {
+                  "cost": 6.78,
+                  "valid_from": "03:30:00",
+                  "valid_to": "00:00:00"
+                }
+              ]
+            }
+          ],
+          "months": [
+            "Jan",
+            "Feb",
+            "Mar"
+          ]
+        },
+        {
+          "days_and_hours": [
+            {
+              "days": [
+                "Weekdays"
+              ],
+              "hours": [
+                {
+                  "cost": 15.897,
+                  "valid_from": "00:00:00",
+                  "valid_to": "00:30:00"
+                },
+                {
+                  "cost": 5,
+                  "valid_from": "00:30:00",
+                  "valid_to": "03:30:00"
+                },
+                {
+                  "cost": 11,
+                  "valid_from": "03:30:00",
+                  "valid_to": "00:00:00"
+                }
+              ]
+            },
+            {
+              "days": [
+                "Weekend"
+              ],
+              "hours": [
+                {
+                  "cost": 15.897,
+                  "valid_from": "00:00:00",
+                  "valid_to": "00:30:00"
+                },
+                {
+                  "cost": 5,
+                  "valid_from": "00:30:00",
+                  "valid_to": "03:30:00"
+                },
+                {
+                  "cost": 11,
+                  "valid_from": "03:30:00",
+                  "valid_to": "00:00:00"
+                }
+              ]
+            }
+          ],
+          "months": [
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec"
+          ]
+        }
+      ],
+      "type": "weekday"
+    }
+  ],
+  "live_mode": false,
+  "timezone": "Europe/London"
+}

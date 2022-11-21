@@ -1,0 +1,37 @@
+<h1 class="title">Sign in to your account</h1>
+<p class="description">Let your appliance access your tariff rates</p>
+
+<form class="form" action="/">
+    <img src="https://static.flatpeak.energy/providers/octopus-uk.png" alt="" class="logo">
+    <input type="text" name="email" placeholder="User ID or Account Number">
+    <input type="password" name="password" placeholder="Password">
+    <button type="submit">Sign in</button>
+</form>
+
+<div class="disclaimer">
+    <p>By logging in you will be sharing your ProviderDisplayName login details with ManufacturerDisplayName.</p>
+
+    <p>We will <strong>only</strong> use your details to read your current tariff and will never share any of this information. View full <a href="#">terms and conditions</a> and <a href="#">privacy policy</a> for more info.</p>
+</div>
+
+<script>
+    document.querySelector('.form')
+            .addEventListener('submit', (e) => {
+                e.preventDefault();
+                const data = Object.fromEntries(new FormData(e.target).entries());
+                fetch('/api/auth', {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data)
+                }).then((res) => res.json()).then((data) => {
+                    if (data.token) {
+                        sessionStorage.setItem('token', data.token);
+                        location.href = '/share';
+                    } else {
+                        console.error(data.error)
+                    }
+                })
+            })
+</script>
