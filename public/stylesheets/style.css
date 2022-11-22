@@ -1,11 +1,11 @@
 @font-face {
     font-family: 'SF Pro Display';
-    src: url(fonts/sf-pro-display/SFProDisplayBold.ttf);
+    src: url(../fonts/sf-pro-display/SFProDisplayBold.ttf);
     font-weight: 700;
 }
 @font-face {
     font-family: 'SF Pro Display';
-    src: url(fonts/sf-pro-display/SFProDisplayRegular.ttf);
+    src: url(../fonts/sf-pro-display/SFProDisplayRegular.ttf);
     font-weight: 400;
 }
 
