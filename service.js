@@ -110,14 +110,14 @@ const obtainKrakenToken = async ({ email, password }) => {
              }
          }
 
-         let agreements = isNotEmptyArray(electricityMeterPoints?.agreements) && electricityMeterPoints?.agreements[0];
-         if (!agreements) {
+         let agreement = isNotEmptyArray(electricityMeterPoints?.agreements) && electricityMeterPoints?.agreements[0];
+         if (!agreement) {
              return {
                  error: 'Agreement not found'
              }
          }
          return {
-             tariffPlan: convertToTariffPlan(agreements)
+             tariffPlan: convertToTariffPlan(agreement)
          };
      } else {
          let errors = response?.data?.errors;
