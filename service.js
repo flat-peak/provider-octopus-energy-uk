@@ -1,6 +1,8 @@
 const axios = require('axios');
 const API_URL = 'https://api.octopus.energy/v1/graphql/';
 
+const isNotEmptyArray = (object) => Array.isArray(object) && object.length;
+
 //TODO: Implement Octopus to Flatpeak convertor
 const convertToTariffPlan = (origTariffPlan) => {
     const mockResponse = require('./temp-mocks/tariff-plan.json');
@@ -95,12 +97,32 @@ const obtainKrakenToken = async ({ email, password }) => {
      const accountResponse = response?.data?.data?.account;
 
      if (accountResponse) {
-         return  {
-             tariffPlan: convertToTariffPlan(accountResponse.properties[0]?.electricityMeterPoints[0]?.agreements[0])
+         const property = isNotEmptyArray(accountResponse.properties) && accountResponse.properties[0];
+         if (!property) {
+             return {
+                 error: 'Property not found'
+             }
+         }
+         let electricityMeterPoints = isNotEmptyArray(property.electricityMeterPoints) && property.electricityMeterPoints[0];
+         if (!electricityMeterPoints) {
+             return {
+                 error: 'Meter points not found'
+             }
+         }
+
+         let agreements = isNotEmptyArray(electricityMeterPoints?.agreements) && electricityMeterPoints?.agreements[0];
+         if (!agreements) {
+             return {
+                 error: 'Agreement not found'
+             }
+         }
+         return {
+             tariffPlan: convertToTariffPlan(agreements)
          };
      } else {
+         let errors = response?.data?.errors;
          return {
-             error: response?.data?.errors[0]?.message
+             error: isNotEmptyArray(errors) ? errors[0].message : 'Unknown error'
          }
      }
 };
