@@ -1,0 +1,8 @@
+query viewer {
+   viewer {
+       fullName
+       accounts {
+             number
+       }
+   }
+}

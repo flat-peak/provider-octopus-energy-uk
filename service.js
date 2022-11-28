@@ -1,5 +1,13 @@
 const axios = require('axios');
+const {Buffer} = require("buffer");
+const fs = require("fs");
 const API_URL = 'https://api.octopus.energy/v1/graphql/';
+
+
+const getPropertiesQuery = fs.readFileSync('./graphql/getProperties.graphql').toString();
+const krakenTokenAuthenticationQuery = fs.readFileSync('./graphql/krakenTokenAuthentication.graphql').toString();
+const viewerQuery = fs.readFileSync('./graphql/viewer.graphql').toString();
+
 
 const isNotEmptyArray = (object) => Array.isArray(object) && object.length;
 
@@ -14,12 +22,7 @@ const convertToTariffPlan = (origTariffPlan) => {
 
 const obtainKrakenToken = async ({ email, password }) => {
    const result = await axios.post(API_URL, {
-        query: `
-          mutation krakenTokenAuthentication($email: String!, $password: String!) {
-            obtainKrakenToken(input: {email: $email, password: $password}) {
-                token
-            }
-          }`,
+        query: krakenTokenAuthenticationQuery,
         variables: { email, password },
         operationName: "krakenTokenAuthentication",
     }, {
@@ -42,16 +45,7 @@ const obtainKrakenToken = async ({ email, password }) => {
 
  const getAccountId = async ({ token }) => {
      const response = await axios.post(API_URL, {
-         query: `
-             query viewer {
-               viewer {
-                   fullName
-                   accounts {
-                         number
-                   }
-               }
-            }
-         `,
+         query: viewerQuery,
          operationName: "viewer",
      }, {
          headers: {
@@ -82,9 +76,9 @@ const obtainKrakenToken = async ({ email, password }) => {
          return {error}
      }
 
+     //FIXME: request/response is corrupted for unknown reason
      const response = await axios.post(API_URL, {
-         query:
-             "query getProperties($accountNumber: String!, $propertiesActiveFrom: DateTime) {\n    account(accountNumber: $accountNumber) {\n        accountType\n\t\t\t\tcanRenewTariff\n        properties(activeFrom: $propertiesActiveFrom) {\n            id\n            address\n            occupancyPeriods {\n                effectiveFrom\n                effectiveTo\n            }\n            coordinates {\n                latitude\n                longitude\n            }\n            electricityMeterPoints {\n                __typename\n                mpan\n                id\n                gspGroupId\n                meters(includeInactive: false) {\n                    id\n                    serialNumber\n                    makeAndType\n                    meterType\n                    importMeter {\n                        id\n                    }\n                    smartDevices {\n                        paymentMode\n                        deviceId\n                    }\n                }\n                agreements {\n                    id\n                    validFrom\n                    validTo\n                    isRevoked\n                    tariff {\n                        __typename\n\n\n\n                        ... on HalfHourlyTariff {\n                            unitRates {\n                                value\n                                validFrom\n                                validTo\n                            }\n                        }\n\n                    }\n                }\n                enrolment {\n                    status\n                    supplyStartDate\n                    switchStartDate\n                    previousSupplier\n                }\n                smartStartDate\n                smartTariffOnboarding {\n                    id\n                    lastUpdated\n                    latestStatus\n                    latestTermsStatus\n                    smartTariffCode\n                }\n                status\n            }\n            gasMeterPoints {\n                __typename\n                mprn\n                id\n                meters {\n                    id\n                    serialNumber\n                    smartDevices {\n                        paymentMode\n                        deviceId\n                    }\n                }\n                agreements {\n                    id\n                    validFrom\n                    validTo\n                    isRevoked\n                    tariff {\n                        displayName\n                        fullName\n                        unitRate\n                        preVatUnitRate\n                        standingCharge\n                        preVatStandingCharge\n                    }\n                }\n                enrolment {\n                    status\n                    supplyStartDate\n                    switchStartDate\n                    previousSupplier\n                }\n                smartStartDate\n                status\n            }\n        }\n    }\n\n\n}",
+         query: getPropertiesQuery,
          variables: { accountNumber: accountId },
          operationName: "getProperties",
      }, {
@@ -127,7 +121,17 @@ const obtainKrakenToken = async ({ email, password }) => {
      }
 };
 
+const hasValidFlatpeakCredentials = async (pubKey) => {
+    // TODO: replace with a whoami or any other appropriate request.
+    await axios.get(process.env.FLATPEAK_API_URL + '/products/prd_636ca8b71787b4fa8cee6f88', {
+       headers: {
+           "Content-Type": "application/json",
+           Authorization: `Basic ${Buffer.from(pubKey + ":").toString("base64")}`
+       }
+   });
+   return true;
+}
 
 module.exports = {
-    fetchTariffPlan, obtainKrakenToken, getAccountId
+    fetchTariffPlan, obtainKrakenToken, getAccountId, hasValidFlatpeakCredentials
 }
