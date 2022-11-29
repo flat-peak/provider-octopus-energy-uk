@@ -1,6 +1,7 @@
 const axios = require('axios');
 const {Buffer} = require("buffer");
 const fs = require("fs");
+const {convertToTariffPlan} = require("./tariff-processers");
 const API_URL = 'https://api.octopus.energy/v1/graphql/';
 
 
@@ -10,15 +11,6 @@ const viewerQuery = fs.readFileSync('./graphql/viewer.graphql').toString();
 
 
 const isNotEmptyArray = (object) => Array.isArray(object) && object.length;
-
-//TODO: Implement Octopus to Flatpeak convertor
-const convertToTariffPlan = (origTariffPlan) => {
-    const mockResponse = require('./temp-mocks/tariff-plan.json');
-    return {
-        ...mockResponse,
-        __orig: origTariffPlan // TODO: remove
-    }
-}
 
 const obtainKrakenToken = async ({ email, password }) => {
    const result = await axios.post(API_URL, {
@@ -122,8 +114,7 @@ const obtainKrakenToken = async ({ email, password }) => {
 };
 
 const hasValidFlatpeakCredentials = async (pubKey) => {
-    // TODO: replace with a whoami or any other appropriate request.
-    await axios.get(process.env.FLATPEAK_API_URL + '/products/prd_636ca8b71787b4fa8cee6f88', {
+    await axios.get(process.env.FLATPEAK_API_URL + '/account', {
        headers: {
            "Content-Type": "application/json",
            Authorization: `Basic ${Buffer.from(pubKey + ":").toString("base64")}`
