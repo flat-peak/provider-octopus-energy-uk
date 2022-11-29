@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
-const axios = require('axios');
-const {obtainKrakenToken, fetchTariffPlan, hasValidFlatpeakCredentials} = require("../service");
+const {obtainKrakenToken, fetchTariffPlan} = require("../services/octopus.service.js");
+const {hasValidCredentials} = require("../services/flatpeek.service");
 
 /* POST auth */
 router.post('/auth', function(req, res, next) {
   const { email, password, pub_key } = req.body;
   try {
-      hasValidFlatpeakCredentials(pub_key)
+      hasValidCredentials(pub_key)
           .then((success) => {
               if (!success) {
                   res.status(403);
@@ -41,7 +41,8 @@ router.post('/auth', function(req, res, next) {
 });
 
 router.post('/connect', function(req, res, next) {
-    const { token, email, password, pub_key } = req.session
+    const { token, email, password, pub_key } = req.session;
+
     if (!token) {
         res.status(401);
         res.send({ error: 'Forbidden' });
@@ -68,8 +69,6 @@ router.post('/connect', function(req, res, next) {
         res.status(500);
         res.send({ error: e.message })
     }
-
-
 });
 
 
