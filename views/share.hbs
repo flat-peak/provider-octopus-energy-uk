@@ -31,17 +31,11 @@
 
         document.querySelector('button[type="submit"]').addEventListener('click', () => {
             console.log('User click submit');
-            const token = sessionStorage.getItem('token');
-            if (!token) {
-                location.href = '/'
-                return;
-            }
             fetch('/api/connect', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
-                },
-                body: JSON.stringify({token: token})
+                }
             }).then((res) => res.json()).then((data) => {
                 if (data.tariff_plan) {
                     callback(data)

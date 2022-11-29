@@ -19,6 +19,7 @@
             .addEventListener('submit', (e) => {
                 e.preventDefault();
                 const data = Object.fromEntries(new FormData(e.target).entries());
+                data.pub_key = window.FLATPEAK_PUBLISHABLE_KEY
                 fetch('/api/auth', {
                     method: 'POST',
                     headers: {
@@ -26,11 +27,10 @@
                     },
                     body: JSON.stringify(data)
                 }).then((res) => res.json()).then((data) => {
-                    if (data.token) {
-                        sessionStorage.setItem('token', data.token);
-                        location.href = '/share';
-                    } else {
+                    if (data.error) {
                         console.error(data.error)
+                    } else {
+                        location.href = '/share';
                     }
                 })
             })

@@ -1,26 +1,38 @@
 var express = require('express');
 var router = express.Router();
 const axios = require('axios');
-const {obtainKrakenToken, fetchTariffPlan} = require("../service");
+const {obtainKrakenToken, fetchTariffPlan, hasValidFlatpeakCredentials} = require("../service");
 
 /* POST auth */
 router.post('/auth', function(req, res, next) {
-  const { email, password } = req.body
+  const { email, password, pub_key } = req.body;
   try {
-      obtainKrakenToken({ email, password })
-          .then(({token, error}) => {
-              if (error) {
+      hasValidFlatpeakCredentials(pub_key)
+          .then((success) => {
+              if (!success) {
                   res.status(403);
-                  res.send({ error })
-              } else {
-                  res.send({ token });
+                  res.send({ error: 'Can\'t authorise to Flatpeak' })
+                  return;
               }
-            })
-        .catch((e) => {
-            console.log(e);
-            res.status(400);
-            res.send({ error: e.message })
-          });
+              return obtainKrakenToken({ email, password })
+                  .then(({token, error}) => {
+                      if (error) {
+                          res.status(403);
+                          res.send({ error })
+                      } else {
+                          req.session.token = token;
+                          req.session.email = email;
+                          req.session.password = password;
+                          req.session.pub_key = pub_key;
+                          res.send({});
+                      }
+                  })
+          })
+          .catch((e) => {
+              console.log(e);
+              res.status(400);
+              res.send({ error: e.message })
+          })
   } catch (e) {
     console.log(e);
     res.status(400);
@@ -29,7 +41,7 @@ router.post('/auth', function(req, res, next) {
 });
 
 router.post('/connect', function(req, res, next) {
-    const { token } = req.body
+    const { token, email, password, pub_key } = req.session
     if (!token) {
         res.status(401);
         res.send({ error: 'Forbidden' });

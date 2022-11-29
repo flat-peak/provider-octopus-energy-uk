@@ -1,0 +1,103 @@
+query getProperties($accountNumber: String!, $propertiesActiveFrom: DateTime) {
+  account(accountNumber: $accountNumber) {
+    accountType
+    canRenewTariff
+    properties(activeFrom: $propertiesActiveFrom) {
+      id
+      address
+      occupancyPeriods {
+        effectiveFrom
+        effectiveTo
+      }
+      coordinates {
+        latitude
+        longitude
+      }
+      electricityMeterPoints {
+        __typename
+        mpan
+        id
+        gspGroupId
+        meters(includeInactive: false) {
+          id
+          serialNumber
+          makeAndType
+          meterType
+          importMeter {
+            id
+          }
+          smartDevices {
+            paymentMode
+            deviceId
+          }
+        }
+        agreements {
+          id
+          validFrom
+          validTo
+          isRevoked
+          tariff {
+            __typename
+            ... on HalfHourlyTariff {
+              unitRates {
+                value
+                validFrom
+                validTo
+              }
+            }
+          }
+        }
+        enrolment {
+          status
+          supplyStartDate
+          switchStartDate
+          previousSupplier
+        }
+        smartStartDate
+        smartTariffOnboarding {
+          id
+          lastUpdated
+          latestStatus
+          latestTermsStatus
+          smartTariffCode
+        }
+        status
+      }
+      gasMeterPoints {
+        __typename
+        mprn
+        id
+        meters {
+          id
+          serialNumber
+          smartDevices {
+            paymentMode
+            deviceId
+          }
+        }
+        agreements {
+          id
+          validFrom
+          validTo
+          isRevoked
+          tariff {
+            displayName
+            fullName
+            unitRate
+            preVatUnitRate
+            standingCharge
+            preVatStandingCharge
+          }
+        }
+        enrolment {
+          status
+          supplyStartDate
+          switchStartDate
+          previousSupplier
+        }
+        smartStartDate
+        status
+      }
+    }
+  }
+}

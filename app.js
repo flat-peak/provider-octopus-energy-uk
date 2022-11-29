@@ -4,7 +4,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const {create} = require('express-handlebars');
+const sessions = require('express-session');
 const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
+dotenv.config();
 
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
@@ -24,6 +27,14 @@ app.set('view engine', '.hbs');
 
 
 app.use(logger('dev'));
+app.use(sessions({
+  secret: process.env.SESSION_SECRET,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 1000 * 60 * 10 // 10 min
+  },
+  resave: false
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
