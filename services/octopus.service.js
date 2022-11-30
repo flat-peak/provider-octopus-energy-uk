@@ -65,7 +65,7 @@ const obtainKrakenToken = async ({ email, password }) => {
      }
  };
 
- const fetchTariffPlan = async ({ token }) => {
+ const fetchAgreement = async ({ token }) => {
      const { accountId, error} = await getAccountId({token});
 
      if (error) {
@@ -110,7 +110,7 @@ const obtainKrakenToken = async ({ email, password }) => {
              }
          }
          return {
-             tariffPlan: convertToTariffPlan(agreement)
+             agreement
          };
      } else {
          let errors = body?.errors;
@@ -121,5 +121,5 @@ const obtainKrakenToken = async ({ email, password }) => {
 };
 
 module.exports = {
-    fetchTariffPlan, obtainKrakenToken, getAccountId
+    fetchAgreement, obtainKrakenToken, getAccountId
 }

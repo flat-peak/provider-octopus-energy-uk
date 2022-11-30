@@ -15,11 +15,15 @@
 </div>
 
 <script>
+    const callback = typeof window.respondToApp === 'function' ? window.respondToApp : console.log;
     document.querySelector('.form')
             .addEventListener('submit', (e) => {
                 e.preventDefault();
                 const data = Object.fromEntries(new FormData(e.target).entries());
-                data.pub_key = window.FLATPEAK_PUBLISHABLE_KEY
+                data.pub_key = window.FLATPEAK_PUBLISHABLE_KEY;
+                data.product_id = window.FLATPEAK_PRODUCT_ID;
+                data.customer_id = window.FLATPEAK_CUSTOMER_ID;
+
                 fetch('/api/auth', {
                     method: 'POST',
                     headers: {
@@ -28,7 +32,10 @@
                     body: JSON.stringify(data)
                 }).then((res) => res.json()).then((data) => {
                     if (data.error) {
-                        console.error(data.error)
+                        if (data.object === "error") {
+                            callback(data);
+                        }
+                        console.error(data)
                     } else {
                         location.href = '/share';
                     }
