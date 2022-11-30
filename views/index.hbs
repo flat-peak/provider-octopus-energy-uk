@@ -15,7 +15,14 @@
 </div>
 
 <script>
-    const callback = typeof window.respondToApp === 'function' ? window.respondToApp : console.log;
+    const callback = (...args) => {
+        if (typeof window.respondToApp === 'function') {
+            console.log('respondToApp:', ...args)
+            window.respondToApp(...args)
+        } else {
+            console.log('local:', ...args);
+        }
+    }
     document.querySelector('.form')
             .addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -31,10 +38,8 @@
                     },
                     body: JSON.stringify(data)
                 }).then((res) => res.json()).then((data) => {
-                    if (data.error) {
-                        if (data.object === "error") {
-                            callback(data);
-                        }
+                    if (data.object === "error") {
+                        callback(data);
                         console.error(data)
                     } else {
                         location.href = '/share';
