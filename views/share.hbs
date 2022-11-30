@@ -30,7 +30,6 @@
         });
 
         document.querySelector('button[type="submit"]').addEventListener('click', () => {
-            console.log('User click submit');
             fetch('/api/connect', {
                 method: 'POST',
                 headers: {
@@ -38,7 +37,7 @@
                 }
             })
             .then((res) => {
-                if (true || res.status === 200) {
+                if (res.status === 200) {
                     res.json().then((data) => {
                         if (data.object === "error") {
                             console.error(data)
@@ -49,7 +48,6 @@
                     location.href = '/'
                 }
             })
-
         });
     </script>
 </div>
