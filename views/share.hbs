@@ -38,13 +38,12 @@
                 }
             })
             .then((res) => {
-                if (res.status === 200) {
+                if (true || res.status === 200) {
                     res.json().then((data) => {
-                        if (data.tariff_plan) {
-                            callback(data)
-                        } else {
-                            console.error(data.error)
+                        if (data.object === "error") {
+                            console.error(data)
                         }
+                        callback(data)
                     })
                 } else {
                     location.href = '/'

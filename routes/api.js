@@ -1,73 +1,71 @@
 var express = require('express');
 var router = express.Router();
-const {obtainKrakenToken, fetchTariffPlan} = require("../services/octopus.service.js");
-const {hasValidCredentials} = require("../services/flatpeek.service");
+const {obtainKrakenToken} = require("../services/octopus.service.js");
+const {connectTariffPlan, FlatpeakService} = require("../services/flatpeak.service");
+const {fetchAgreement} = require("../services/octopus.service");
 
 /* POST auth */
 router.post('/auth', function(req, res, next) {
-  const { email, password, pub_key } = req.body;
+  const { email, password, pub_key, product_id, customer_id } = req.body;
+  const service = new FlatpeakService(process.env.FLATPEAK_API_URL, pub_key)
   try {
-      hasValidCredentials(pub_key)
+      service
+          .hasValidCredentials()
           .then((success) => {
               if (!success) {
-                  res.status(403);
-                  res.send({ error: 'Can\'t authorise to Flatpeak' })
-                  return;
+                  throw new Error('Can\'t authorise to Flatpeak');
               }
               return obtainKrakenToken({ email, password })
                   .then(({token, error}) => {
                       if (error) {
-                          res.status(403);
-                          res.send({ error })
-                      } else {
-                          req.session.token = token;
-                          req.session.email = email;
-                          req.session.password = password;
-                          req.session.pub_key = pub_key;
-                          res.send({});
+                          throw new Error(error);
                       }
+                      req.session.email = email;
+                      req.session.password = password;
+                      req.session.pub_key = pub_key;
+                      req.session.product_id = product_id;
+                      req.session.customer_id = customer_id;
+                      res.send({});
                   })
           })
           .catch((e) => {
               console.log(e);
               res.status(400);
-              res.send({ error: e.message })
+              res.send({ object: 'error', type: 'api_error', message: e.message })
           })
   } catch (e) {
-    console.log(e);
-    res.status(400);
-    res.send({ error: e.message })
+      console.log(e);
+      res.status(500);
+      res.send({ object: 'error', type: 'server_error', message: e.message })
   }
 });
 
 router.post('/connect', function(req, res, next) {
-    const { token, email, password, pub_key } = req.session;
+    const { email, password, pub_key, product_id, customer_id } = req.session;
 
-    if (!token) {
-        res.status(401);
-        res.send({ error: 'Forbidden' });
-        return;
-    }
     try {
-        console.log('Try with token', token)
-        fetchTariffPlan({ token })
-            .then(({tariffPlan, error}) => {
+        obtainKrakenToken({ email, password }).then(({token, error}) => {
+            if (error) {
+                throw new Error(error);
+            }
+            return fetchAgreement({ token });
+        })
+            .then(({agreement, error}) => {
                 if (error) {
-                    res.status(403);
-                    res.send({ error })
-                } else {
-                    res.send({ tariff_plan: tariffPlan });
+                    throw new Error(error);
                 }
+                return connectTariffPlan(agreement, product_id, customer_id, {email, password }, pub_key)
             })
+            .then((result) => res.send(result))
             .catch((e) => {
                 console.log(e);
                 res.status(400);
-                res.send({ error: e.message })
+                res.send({ object: 'error', type: 'api_error', message: e.message })
             });
     } catch (e) {
         console.log(e);
         res.status(500);
-        res.send({ error: e.message })
+        res.send({ object: 'error', type: 'server_error', message: e.message })
     }
 });
 
