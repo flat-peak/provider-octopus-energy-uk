@@ -1,6 +1,6 @@
 const fetch = require("node-fetch");
 const {Buffer} = require("buffer");
-const {convertToTariffPlan} = require("../tariff-processers");
+const {convertToTariffPlan} = require("../tariff-processors");
 
 class FlatpeakService {
     #publishableKey;
