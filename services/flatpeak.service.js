@@ -155,15 +155,15 @@ const throwIfError = async (request) => {
     return result;
 }
 
-const connectTariffPlan = async (octopusAgreement, productId, customerId, credentials, publishableKey) => {
+const connectTariffPlan = async (octopusAgreement, tariffCode, productId, customerId, credentials, publishableKey) => {
     const service = new FlatpeakService(process.env.FLATPEAK_API_URL, publishableKey)
     const plan = convertToTariffPlan(octopusAgreement);
 
     const customer = await throwIfError((customerId ? service.getCustomer(customerId) : service.createCustomer({})));
     const product = await throwIfError((productId ? service.getProduct(productId) : service.createProduct({
-        display_name: 'Octopus - Connected', // TODO: better wording require or may be we can take it from agreement
+        display_name: tariffCode,
         customer_id: customer.id,
-        provider_id: 'prv_6319e76eb4a1f6a1dddb726f', // TODO: what an appropriate place / a way to get the id?
+        provider_id: process.env.PROVIDER_ID,
         is_enabled: true,
         on_supply: true,
         is_connected: true,
@@ -183,11 +183,10 @@ const connectTariffPlan = async (octopusAgreement, productId, customerId, creden
 
     await throwIfError(service.updateProduct(product.id, {
         "agreement_fetch_settings": {
-            // FIXME: Server responds with: account with id not found
-            // "auth_metadata": {
-            //     product_id: product.id,
-            //     data: credentials
-            // }
+            "auth_metadata": {
+                product_id: product.id,
+                data: credentials
+            }
         },
         "tariff_plan_id": tariffPlan.id,
         "agreement_id": agreement.id

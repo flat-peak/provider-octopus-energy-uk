@@ -110,7 +110,8 @@ const obtainKrakenToken = async ({ email, password }) => {
              }
          }
          return {
-             agreement
+             agreement,
+             tariffCode: electricityMeterPoints?.smartTariffOnboarding?.smartTariffCode
          };
      } else {
          let errors = body?.errors;
