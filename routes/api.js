@@ -3,7 +3,7 @@ var router = express.Router();
 const {obtainKrakenToken} = require("../services/octopus.service.js");
 const {connectTariffPlan, FlatpeakService} = require("../services/flatpeak.service");
 const {fetchAgreement} = require("../services/octopus.service");
-const {convertToTariffPlan} = require("../tariff-processers");
+const {convertToTariffPlan} = require("../tariff-processors");
 
 /* POST auth */
 router.post('/auth', function(req, res, next) {
