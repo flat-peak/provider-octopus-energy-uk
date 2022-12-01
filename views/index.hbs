@@ -30,7 +30,7 @@
                 data.pub_key = window.FLATPEAK_PUBLISHABLE_KEY;
                 data.product_id = window.FLATPEAK_PRODUCT_ID;
                 data.customer_id = window.FLATPEAK_CUSTOMER_ID;
-
+                callback({object: 'loading', type: 'loading_start'})
                 fetch('/api/auth', {
                     method: 'POST',
                     headers: {
@@ -38,6 +38,7 @@
                     },
                     body: JSON.stringify(data)
                 }).then((res) => res.json()).then((data) => {
+                    callback({object: 'loading', type: 'loading_end'})
                     if (data.object === "error") {
                         callback(data);
                         console.error(data)

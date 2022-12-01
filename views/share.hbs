@@ -36,6 +36,7 @@
         });
 
         document.querySelector('button[type="submit"]').addEventListener('click', () => {
+            callback({object: 'loading', type: 'loading_start'})
             fetch('/api/connect', {
                 method: 'POST',
                 headers: {
@@ -43,12 +44,13 @@
                 }
             })
             .then((res) => {
+                callback({object: 'loading', type: 'loading_end'})
                 if (res.status === 200) {
                     res.json().then((data) => {
                         if (data.object === "error") {
                             console.error(data)
                         }
-                        callback(data)
+                        callback(data);
                     })
                 } else {
                     location.href = '/'
