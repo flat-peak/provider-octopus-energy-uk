@@ -155,48 +155,38 @@ const throwIfError = async (request) => {
     return result;
 }
 
-const connectTariffPlan = async (octopusAgreement, tariffCode, productId, customerId, credentials, publishableKey) => {
+const connectTariffPlan = async (octopusDetails, productId, customerId, credentials, publishableKey) => {
+    const { agreement: octopusAgreement, tariffCode, clientReferenceId } = octopusDetails;
     const service = new FlatpeakService(process.env.FLATPEAK_API_URL, publishableKey)
     const plan = convertToTariffPlan(octopusAgreement);
-
     const customer = await throwIfError((customerId ? service.getCustomer(customerId) : service.createCustomer({})));
-    const product = await throwIfError((productId ? service.getProduct(productId) : service.createProduct({
-        display_name: tariffCode,
+    let product = await throwIfError((productId ? service.getProduct(productId) : service.createProduct({
         customer_id: customer.id,
         provider_id: process.env.PROVIDER_ID,
-        is_enabled: true,
-        on_supply: true,
-        is_connected: true,
-        timezone: plan.timezone,
-        agreement_fetch: true,
+        timezone: plan.timezone
     })));
     plan.product_id = product.id;
 
-
-    const agreement = await throwIfError(service.createAgreement({
-        "live_mode": true,
-        "product_id": product.id,
-        "data": {}
-    }));
-
     const tariffPlan = await throwIfError(service.createTariffPlan(plan))
 
-    await throwIfError(service.updateProduct(product.id, {
-        "agreement_fetch_settings": {
+    product = await throwIfError(service.updateProduct(product.id, {
+        "tariff_settings": {
+            "client_reference_id": clientReferenceId,
+            "display_name": tariffCode,
+            "is_enabled": true,
+            "integrated": true,
+            "tariff_plan_id": tariffPlan.id,
             "auth_metadata": {
                 product_id: product.id,
                 data: credentials
             }
         },
-        "tariff_plan_id": tariffPlan.id,
-        "agreement_id": agreement.id
     }));
 
     return {
         customer_id: customer.id,
         product_id: product.id,
-        tariff_plan_id: tariffPlan.id,
-        agreement_id: agreement.id,
+        tariff_plan_id: tariffPlan.id
     }
 }
 

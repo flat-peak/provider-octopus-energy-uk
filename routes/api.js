@@ -51,11 +51,11 @@ router.post('/connect', function(req, res, next) {
             }
             return fetchAgreement({ token });
         })
-            .then(({agreement, tariffCode, error}) => {
+            .then(({agreement, tariffCode, clientReferenceId, error}) => {
                 if (error) {
                     throw new Error(error);
                 }
-                return connectTariffPlan(agreement, tariffCode, product_id, customer_id, { email, password }, pub_key)
+                return connectTariffPlan({ agreement, tariffCode, clientReferenceId }, product_id, customer_id, { email, password }, pub_key)
             })
             .then((result) => res.send(result))
             .catch((e) => {
