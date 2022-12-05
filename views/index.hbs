@@ -1,50 +1,17 @@
-<h1 class="title">Sign in to your account</h1>
-<p class="description">Let your appliance access your tariff rates</p>
-
-<form class="form" action="/">
-    <img src="https://static.flatpeak.energy/providers/octopus-uk.png" alt="" class="logo">
-    <input type="text" name="email" placeholder="User ID or Account Number">
-    <input type="password" name="password" placeholder="Password">
-    <button type="submit">Sign in</button>
+<form name="redirect" method="post" action="/auth">
+    <input type="hidden" name="pub_key" />
+    <input type="hidden" name="product_id" />
+    <input type="hidden" name="customer_id" />
 </form>
-
-<div class="disclaimer">
-    <p>By logging in you will be sharing your {ProviderDisplayName} login details with {ManufacturerDisplayName}.</p>
-
-    <p>We will <strong>only</strong> use your details to read your current tariff and will never share any of this information. View full <a href="#">terms and conditions</a> and <a href="#">privacy policy</a> for more info.</p>
-</div>
-
 <script>
-    const callback = (...args) => {
-        if (typeof window.respondToApp === 'function') {
-            console.log('respondToApp:', ...args)
-            window.respondToApp(...args)
-        } else {
-            console.log('local:', ...args);
-        }
-    }
-    document.querySelector('.form')
-            .addEventListener('submit', (e) => {
-                e.preventDefault();
-                const data = Object.fromEntries(new FormData(e.target).entries());
-                data.pub_key = window.FLATPEAK_PUBLISHABLE_KEY;
-                data.product_id = window.FLATPEAK_PRODUCT_ID;
-                data.customer_id = window.FLATPEAK_CUSTOMER_ID;
-                callback({object: 'loading', type: 'loading_start'})
-                fetch('/api/auth', {
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(data)
-                }).then((res) => res.json()).then((data) => {
-                    callback({object: 'loading', type: 'loading_end'})
-                    if (data.object === "error") {
-                        callback(data);
-                        console.error(data)
-                    } else {
-                        location.href = '/share';
-                    }
-                })
-            })
+    window.addEventListener("load", function () {
+        callback({object: 'loading', type: 'loading_start'});
+        const form = document.querySelector('form[name=redirect]')
+        Object.entries({
+            'pub_key': window.FLATPEAK_PUBLISHABLE_KEY || '',
+            'product_id': window.FLATPEAK_PRODUCT_ID || '',
+            'customer_id': window.FLATPEAK_CUSTOMER_ID || ''
+        }).forEach(([key, value]) => form.querySelector(`[name=${key}]`).value = value);
+        form.submit();
+    });
 </script>

@@ -23,14 +23,9 @@
     </div>
 
     <script>
-        const callback = (...args) => {
-            if (typeof window.respondToApp === 'function') {
-                console.log('respondToApp:', ...args)
-                window.respondToApp(...args)
-            } else {
-                console.log('local:', ...args);
-            }
-        }
+        window.addEventListener("load", function () {
+            callback({object: 'loading', type: 'loading_end'});
+        });
         document.querySelector('button[type="reset"]').addEventListener('click', () => {
            callback({object: 'error', type: 'user_reject'});
         });

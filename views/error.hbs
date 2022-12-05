@@ -1,3 +1,6 @@
-<h1>{{{message}}}</h1>
-<h2>{{{error.status}}}</h2>
-<pre>{{{error.stack}}}</pre>
+<h1 class="title">Error</h1>
+<p class="description">{{{message}}}</p>
+
+<script>
+    callback({ object: 'error', type: 'api_error', message: '{{{message}}}' || 'Something went wrong' });
+</script>

@@ -58,6 +58,16 @@ class FlatpeakService {
     }
 
     /**
+     * @return {Promise<Account>}
+     */
+    async getAccount() {
+        const response = await this.performRequest(`${this.#host}/account`, {
+            method: "GET"
+        });
+        return await response.json();
+    }
+
+    /**
      * @param {string} productId
      * @return {Promise<Product>}
      */
