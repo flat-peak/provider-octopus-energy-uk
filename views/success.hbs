@@ -1,0 +1,26 @@
+<h1 class="title">Success</h1>
+
+{{#if callbackUrl}}
+<form name="callback" method="post" action="{{{callbackUrl}}}">
+    <input type="hidden" name="tariff_plan_id" value="{{{tariff_plan_id}}}"/>
+    <input type="hidden" name="product_id" value="{{{product_id}}}"/>
+    <input type="hidden" name="customer_id" value="{{{customer_id}}}" />
+</form>
+<script>
+window.addEventListener("load", function () {
+    document.querySelector('form[name=callback]').submit();
+});
+</script>
+{{/if}}
+
+<script>
+    window.addEventListener("load", function () {
+        window.requestAnimationFrame(() => {
+            callback({
+                tariff_plan_id: "{{{tariff_plan_id}}}",
+                product_id: "{{{product_id}}}",
+                customer_id: "{{{customer_id}}}",
+            });
+        });
+    });
+</script>

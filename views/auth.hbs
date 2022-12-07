@@ -1,12 +1,10 @@
 <h1 class="title">Sign in to your account</h1>
 <p class="description">Let your appliance access your tariff rates</p>
 
-<form name="auth" class="form" action="/share" method="post">
+<form name="auth" class="form" action="/auth" method="post">
     <img src="https://static.flatpeak.energy/providers/octopus-uk.png" alt="" class="logo">
     <input type="text" name="email" placeholder="User ID or Account Number" value="">
     <input type="password" name="password" placeholder="Password" value="">
-    <!-- TODO: temporary for testing purpose, remove later -->
-    <input type="hidden" name="accountId" value="{{{accountId}}}">
     <button type="submit">Sign in</button>
 </form>
 
@@ -18,14 +16,11 @@
 
 <script>
     window.addEventListener("load", function () {
-        const lastError = '{{{lastError}}}';
-        callback({object: 'loading', type: 'loading_end'});
-        if (lastError) {
-            callback({object: 'error', type: 'api_error', message: lastError});
-        }
+        window.requestAnimationFrame(() => {
+            const lastError = '{{{lastError}}}';
+            if (lastError) {
+                callback({object: 'error', type: 'api_error', message: lastError});
+            }
+        });
     });
-    document.querySelector('.form')
-            .addEventListener('submit', (e) => {
-               callback({object: 'loading', type: 'loading_start'});
-            });
 </script>

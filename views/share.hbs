@@ -1,20 +1,22 @@
 <h1 class="title">Share your tariff</h1>
 <p class="description">Let your devices access your tariff rates</p>
 
-<div class="form">
+<form name="reset" action="/cancel" method="post" style="display: none"></form>
+
+<form name="share" class="form" action="/share" method="post">
     <p>ManufacturerDisplayName wants to access your energy account</p>
 
     <div class="share-disclaimer">
-        <p>This will allow ManufacturerDisplayName to:</p>
+        <p>This will allow {{{ManufacturerDisplayName}}} to:</p>
         <ul>
             <li>View your email address</li>
             <li>View your account number</li>
             <li>View your electricity tariff</li>
         </ul>
 
-        <p>Make sure that you trust ManufacturerDisplayName</p>
+        <p>Make sure that you trust {{{ManufacturerDisplayName}}}</p>
 
-        <p class="additional">You may be sharing sensitive info with this site or app.  Learn about how ManufacturerDisplayName will handle your data by reviewing its privacy policies.  You can always see or remove access in your Dominion Energy account</p>
+        <p class="additional">You may be sharing sensitive info with this site or app.  Learn about how {{{ManufacturerDisplayName}}} will handle your data by reviewing its privacy policies.  You can always see or remove access in your Dominion Energy account</p>
     </div>
 
     <div class="buttons">
@@ -23,34 +25,8 @@
     </div>
 
     <script>
-        window.addEventListener("load", function () {
-            callback({object: 'loading', type: 'loading_end'});
-        });
-        document.querySelector('button[type="reset"]').addEventListener('click', () => {
-           callback({object: 'error', type: 'user_reject'});
-        });
-
-        document.querySelector('button[type="submit"]').addEventListener('click', () => {
-            callback({object: 'loading', type: 'loading_start'})
-            fetch('/api/connect', {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            })
-            .then((res) => {
-                callback({object: 'loading', type: 'loading_end'})
-                if (res.status === 200) {
-                    res.json().then((data) => {
-                        if (data.object === "error") {
-                            console.error(data)
-                        }
-                        callback(data);
-                    })
-                } else {
-                    location.href = '/'
-                }
-            })
+        document.querySelector('form[name="share"]').addEventListener('reset', () => {
+            document.querySelector('form[name="reset"]').submit();
         });
     </script>
-</div>
+</form>
