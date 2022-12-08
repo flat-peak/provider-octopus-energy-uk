@@ -1,6 +1,27 @@
 <h1 class="title">Error</h1>
-<p class="description">{{{message}}}</p>
+<p class="description">{{{error}}}</p>
+
+{{#if callbackUrl}}
+    <form name="callback" method="post" action="{{{callbackUrl}}}">
+        <input type="hidden" name="error" value="{{{error}}}"/>
+    </form>
+    <script>
+        window.addEventListener("load", function () {
+            document.querySelector('form[name=callback]').submit();
+        });
+    </script>
+{{/if}}
+
 
 <script>
-    callback({ object: 'error', type: 'api_error', message: '{{{message}}}' || 'Something went wrong' });
+    window.addEventListener("load", function () {
+        window.requestAnimationFrame(() => {
+            callback({
+                object: 'error',
+                type: 'integration_error',
+                critical: true,
+                message: '{{{error}}}' || 'Something went wrong'
+            });
+        });
+    });
 </script>
