@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const {obtainKrakenToken} = require("../services/octopus.service.js");
-const {connectTariffPlan, FlatpeakService} = require("../services/flatpeak.service");
+const {connectTariff, FlatpeakService} = require("../services/flatpeak.service");
 const {fetchAgreement} = require("../services/octopus.service");
 const {convertToTariffPlan} = require("../tariff-processors");
 
@@ -19,7 +19,7 @@ router.post('/connect', function(req, res, next) {
                 if (error) {
                     throw new Error(error);
                 }
-                return connectTariffPlan({ agreement, tariffCode, clientReferenceId }, product_id, customer_id, { email, password }, pub_key)
+                return connectTariff({ agreement, tariffCode, clientReferenceId }, product_id, customer_id, { email, password }, pub_key)
             })
             .then((result) => res.send(result))
             .catch((e) => {

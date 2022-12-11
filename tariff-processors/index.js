@@ -10,7 +10,7 @@ const processTariff = (octopusTariff) => {
 
 const convertToTariffPlan = (octopusAgreement) => {
     return Object.assign({
-        "object": "tariff_plan",
+        "object": "tariff",
         "is_connected": true,
         "product_id": undefined,
         "timezone": "Europe/London",

@@ -1,14 +1,41 @@
 const {FlatpeakService} = require("./services/flatpeak.service");
 const {obtainKrakenToken} = require("./services/octopus.service");
 
-function populateTemplate(session) {
+/**
+ * @param {string} last_error
+ * @param {string} callback_url
+ * @param {FlatPeak.Account} account
+ * @return {Object}
+ */
+function populateTemplate({last_error, callback_url, account}) {
+    const displaySettings = account.display_settings;
+    const hasAssets = Array.isArray(displaySettings.language_assets) && displaySettings.language_assets.length;
+    let langAssets = hasAssets
+        ? (
+            displaySettings.language_assets
+                .find((entry) => entry.language_code === displaySettings.default_language)
+            || displaySettings.language_assets[0]
+            )
+        :  { // TODO: temporary fallback until data is populated for all accounts
+            "language_code": "EN",
+            "display_name": "Motor Group",
+            //"logo_url": "https://static.flatpeak.energy/assets/motorm.png", // FIXME: missing asset
+            "logo_url": "https://static.flatpeak.energy/providers/octopus-uk.png",
+            "support_url": "https://www.motorm.com/uk/motorm-support/",
+            "terms_url": "https://www.motorm.com/uk/terms/",
+            "privacy_url": "https://www.motorm.com/uk/privacy-policy/",
+            "accent_color": "#333333" // FIXME: Connect
+        }
+
     return {
-        lastError: session.last_error,
-        callbackUrl: session.callback_url,
-        ProviderDisplayName: 'OctopusEnergy', // FIXME: wording?
-        ManufacturerDisplayName: '{ManufacturerDisplayName}', // FIXME: connect
-        ManufacturerTermsUrl: '#', // FIXME: connect
-        ManufacturerPolicyUrl: '#' // FIXME: connect
+        lastError: last_error,
+        callbackUrl: callback_url,
+        ProviderDisplayName: 'Octopus Energy', // FIXME: wording?
+        ManufacturerDisplayName: langAssets.display_name,
+        ManufacturerTermsUrl: langAssets.terms_url,
+        ManufacturerPolicyUrl: langAssets.privacy_url,
+        ManufacturerAccentColor: langAssets.accent_color || "#333333",
+        ManufacturerLogoUrl: langAssets.logo_url
     }
 }
 function captureInputParams(req, res, {pub_key, product_id, customer_id, callback_url}) {
