@@ -1,7 +1,7 @@
 var express = require('express');
 const {captureInputParams, populateTemplate, captureAuthMetaData, respondWithError} = require("../auth-controller");
 const {obtainKrakenToken, fetchAgreement} = require("../services/octopus.service");
-const {connectTariffPlan} = require("../services/flatpeak.service");
+const {connectTariff} = require("../services/flatpeak.service");
 var router = express.Router();
 
 router.get('/', function (req, res, next) {
@@ -15,7 +15,7 @@ router.get('/', function (req, res, next) {
         return captureInputParams(req, res, {pub_key, product_id, customer_id, callback_url})
     }
     // capture input params from javascript context
-    res.render('index', {title: 'Octopus integration'});
+    res.render('index', {title: 'Octopus Energy integration'});
 });
 
 // capture input params from POST payload
@@ -30,7 +30,7 @@ router.get('/auth', function (req, res, next) {
         return;
     }
     res.render('auth', {
-        title: 'Sign in to your account',
+        title: 'Sign in to your account with Octopus Energy',
         ...populateTemplate(req.session)
     });
 });
@@ -82,7 +82,7 @@ router.post('/share', function (req, res, next) {
                 if (error) {
                     throw new Error(error);
                 }
-                return connectTariffPlan({ agreement, tariffCode, clientReferenceId }, product_id, customer_id, auth_metadata, pub_key)
+                return connectTariff({ agreement, tariffCode, clientReferenceId }, product_id, customer_id, auth_metadata, pub_key)
             })
             .then((result) => {
                 res.render('success', {

@@ -9,11 +9,23 @@
     font-weight: 400;
 }
 
+html {
+    --fp-theme-background: #FFFFFF;
+    --accent-color: #f050f8;
+}
+
 body {
     background: var(--fp-theme-background, #FFFFFF);
     user-select: none;
+    margin: 0;
 }
+
+a {
+    color: inherit;
+}
+
 .page {
+    padding: 12px 0;
     min-width: 335px;
     max-width: 335px;
     box-sizing: border-box;
@@ -35,8 +47,7 @@ body {
     font-weight: 700;
     font-size: 25px;
     line-height: 30px;
-    color: #8ECD52;
-    color: #f050f8;
+    color: var(--accent-color);
 
     margin: 0;
 }
@@ -47,7 +58,16 @@ body {
     font-size: 17px;
     line-height: 20px;
     margin: 4px 0 0 0;
+    color: #000000;
+}
 
+.gdpr-description {
+    font-family: 'SF Pro Display';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 19px;
+    margin: 24px 0 0 0;
     color: #000000;
 }
 
@@ -62,7 +82,7 @@ body {
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    padding: 25px 14px 46px;
+    padding: 25px 14px 25px;
     margin-top: 25px;
 }
 .form input {
@@ -85,8 +105,7 @@ body {
 }
 .form button[type=reset],
 .form button[type=submit] {
-    background: #2F6ABE;
-    background: #f050f8;
+    background: var(--accent-color);
     backdrop-filter: blur(2px);
     border: none;
     padding: 8px 12px;
@@ -116,9 +135,6 @@ body {
 }
 p.additional {
     color: rgba(77, 77, 77, 0.81);
-}
-.disclaimer a {
-    color: inherit;
 }
 
 .buttons {

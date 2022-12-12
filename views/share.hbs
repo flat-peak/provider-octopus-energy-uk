@@ -3,8 +3,9 @@
 
 <form name="reset" action="/cancel" method="post" style="display: none"></form>
 
-<form name="share" class="form" action="/share" method="post">
-    <p>ManufacturerDisplayName wants to access your energy account</p>
+<form name="share" class="form" action="/share" method="post" style="--accent-color: {{{ManufacturerAccentColor}}}">
+    <img src="{{{ManufacturerLogoUrl}}}" alt="" class="logo">
+    <p>{{{ManufacturerDisplayName}}} wants to access your energy account</p>
 
     <div class="share-disclaimer">
         <p>This will allow {{{ManufacturerDisplayName}}} to:</p>

@@ -1,5 +1,8 @@
-<h1 class="title">Sign in to your account</h1>
-<p class="description">Let your appliance access your tariff rates</p>
+<h1 class="title">Sign in to your account <br/> with {{{ProviderDisplayName}}}</h1>
+
+<p class="gdpr-description">
+    <strong>IMPORTANT:</strong> By logging in, you will be sharing your account login details with {{{ManufacturerDisplayName}}}, the manufacturer of your vehicle. Your data will be stored and processed in strict compliance with GDPR.<br/> Review full <a href="{{{ManufacturerPolicyUrl}}}">privacy policy</a>.
+</p>
 
 <form name="auth" class="form" action="/auth" method="post">
     <img src="https://static.flatpeak.energy/providers/octopus-uk.png" alt="" class="logo">
@@ -7,12 +10,6 @@
     <input type="password" name="password" placeholder="Password" value="">
     <button type="submit">Sign in</button>
 </form>
-
-<div class="disclaimer">
-    <p>By logging in you will be sharing your {{{ProviderDisplayName}}} login details with {{{ManufacturerDisplayName}}}.</p>
-
-    <p>We will <strong>only</strong> use your details to read your current tariff and will never share any of this information. View full <a href="{{{ManufacturerTermsUrl}}}">terms and conditions</a> and <a href="{{{ManufacturerPolicyUrl}}}">privacy policy</a> for more info.</p>
-</div>
 
 <script>
     window.addEventListener("load", function () {

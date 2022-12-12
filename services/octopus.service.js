@@ -1,7 +1,5 @@
-const {Buffer} = require("buffer");
 const fs = require("fs");
 const fetch = require("node-fetch");
-const {convertToTariffPlan} = require("../tariff-processors");
 const API_URL = 'https://api.octopus.energy/v1/graphql/';
 
 const getPropertiesQuery = fs.readFileSync('./graphql/getProperties.graphql').toString();
