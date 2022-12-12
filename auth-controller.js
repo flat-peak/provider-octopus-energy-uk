@@ -9,23 +9,24 @@ const {obtainKrakenToken} = require("./services/octopus.service");
  */
 function populateTemplate({last_error, callback_url, account}) {
     const displaySettings = account.display_settings;
-    const hasAssets = Array.isArray(displaySettings.language_assets) && displaySettings.language_assets.length;
-    let langAssets = hasAssets
+    const hasAssets = Array.isArray(displaySettings?.language_assets) && displaySettings?.language_assets.length;
+    const langAssets = hasAssets
         ? (
             displaySettings.language_assets
                 .find((entry) => entry.language_code === displaySettings.default_language)
             || displaySettings.language_assets[0]
             )
-        :  { // TODO: temporary fallback until data is populated for all accounts
-            "language_code": "EN",
-            "display_name": "Motor Group",
+        : {}
+
+    Object.assign(
+        langAssets, // TODO: temporary fallback until data is populated for all accounts
+        {
+            // TODO: TBD: Not sure if it should be language specific
             //"logo_url": "https://static.flatpeak.energy/assets/motorm.png", // FIXME: missing asset
             "logo_url": "https://static.flatpeak.energy/providers/octopus-uk.png",
-            "support_url": "https://www.motorm.com/uk/motorm-support/",
-            "terms_url": "https://www.motorm.com/uk/terms/",
-            "privacy_url": "https://www.motorm.com/uk/privacy-policy/",
             "accent_color": "#333333" // FIXME: Connect
         }
+     );
 
     return {
         lastError: last_error,
