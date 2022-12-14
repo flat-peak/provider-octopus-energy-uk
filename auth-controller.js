@@ -18,20 +18,10 @@ function populateTemplate({last_error, callback_url, account}) {
             )
         : {}
 
-    Object.assign(
-        langAssets, // TODO: temporary fallback until data is populated for all accounts
-        {
-            // TODO: TBD: Not sure if it should be language specific
-            //"logo_url": "https://static.flatpeak.energy/assets/motorm.png", // FIXME: missing asset
-            "logo_url": "https://static.flatpeak.energy/providers/octopus-uk.png",
-            "accent_color": "#333333" // FIXME: Connect
-        }
-     );
-
     return {
         lastError: last_error,
         callbackUrl: callback_url,
-        ProviderDisplayName: 'Octopus Energy', // FIXME: wording?
+        ProviderDisplayName: 'Octopus Energy',
         ManufacturerDisplayName: langAssets.display_name,
         ManufacturerTermsUrl: langAssets.terms_url,
         ManufacturerPolicyUrl: langAssets.privacy_url,
