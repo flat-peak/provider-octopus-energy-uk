@@ -1,14 +1,14 @@
-<h1 class="title">Sign in to your account <br/> with {{{ProviderDisplayName}}}</h1>
+<h1 class="title">Connect your account <br/> with {{{ProviderDisplayName}}}</h1>
 
 <p class="gdpr-description">
-    <strong>IMPORTANT:</strong> By logging in, you will be sharing your account login details with {{{ManufacturerDisplayName}}}, the manufacturer of your vehicle. Your data will be stored and processed in strict compliance with GDPR.<br/> Review full <a href="{{{ManufacturerPolicyUrl}}}">privacy policy</a>.
+    <strong>IMPORTANT:</strong> By submitting your details, you will be sharing them with {{{ManufacturerDisplayName}}}, the manufacturer of your vehicle. Your data will be stored and processed in strict compliance with GDPR. Review full <a href="{{{ManufacturerPolicyUrl}}}">privacy policy</a>.
 </p>
 
 <form name="auth" class="form" action="/auth" method="post">
     <img src="https://static.flatpeak.energy/providers/octopus-uk.png" alt="" class="logo">
-    <input type="text" name="email" placeholder="User ID or Account Number" value="">
+    <input type="text" name="email" placeholder="Email address" value="">
     <input type="password" name="password" placeholder="Password" value="">
-    <button type="submit">Sign in</button>
+    <button type="submit">Submit</button>
 </form>
 
 <script>

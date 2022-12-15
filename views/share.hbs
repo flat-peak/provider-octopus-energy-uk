@@ -1,23 +1,22 @@
-<h1 class="title">Share your tariff</h1>
-<p class="description">Let your devices access your tariff rates</p>
+<h1 class="title">Share your tariff <br/> with {{{ManufacturerDisplayName}}}</h1>
 
 <form name="reset" action="/cancel" method="post" style="display: none"></form>
 
 <form name="share" class="form" action="/share" method="post" style="--accent-color: {{{ManufacturerAccentColor}}}">
     <img src="{{{ManufacturerLogoUrl}}}" alt="" class="logo">
-    <p>{{{ManufacturerDisplayName}}} wants to access your energy account</p>
+    <p>{{{ManufacturerDisplayName}}} wants to access your account</p>
 
     <div class="share-disclaimer">
-        <p>This will allow {{{ManufacturerDisplayName}}} to:</p>
+        <p> This will allow them to view your:</p>
         <ul>
-            <li>View your email address</li>
-            <li>View your account number</li>
-            <li>View your electricity tariff</li>
+            <li>Electricity tariff(s)</li>
+            <li>Email and postal address</li>
+            <li>Account number</li>
         </ul>
 
-        <p>Make sure that you trust {{{ManufacturerDisplayName}}}</p>
+        <p>Make sure that you know who is {{{ManufacturerDisplayName}}}</p>
 
-        <p class="additional">You may be sharing sensitive info with this site or app.  Learn about how {{{ManufacturerDisplayName}}} will handle your data by reviewing its privacy policies.  You can always see or remove access in your Dominion Energy account</p>
+        <p class="additional">You may be sharing sensitive info with this site or app.  Learn about how {{{ManufacturerDisplayName}}} will handle your data by reviewing their <a href="{{{ManufacturerTermsUrl}}}">privacy policy</a> and <a href="{{{ManufacturerPolicyUrl}}}">terms of service</a>. You can always see or remove access by contacting {{{ManufacturerDisplayName}}} support</p>
     </div>
 
     <div class="buttons">
