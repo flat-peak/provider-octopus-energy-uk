@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const {obtainKrakenToken} = require("../services/octopus.service.js");
-const {connectTariff, FlatpeakService} = require("../services/flatpeak.service");
+const {connectTariff} = require("../services/flatpeak.service");
 const {fetchAgreement} = require("../services/octopus.service");
 const {convertToTariffPlan} = require("../tariff-processors");
 
