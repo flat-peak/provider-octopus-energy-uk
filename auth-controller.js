@@ -1,4 +1,4 @@
-const {FlatpeakService} = require("./services/flatpeak.service");
+const {FlatpeakService} = require("@flat-peak/api-service");
 const {obtainKrakenToken} = require("./services/octopus.service");
 
 /**
