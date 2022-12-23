@@ -8,7 +8,7 @@ const viewerQuery = fs.readFileSync('./graphql/viewer.graphql').toString();
 
 const isNotEmptyArray = (object) => Array.isArray(object) && object.length;
 
-const obtainKrakenToken = async ({email, password}) => {
+const isValidAuthMetadata = async ({email, password}) => {
   const resp = await fetch(API_URL, {
     method: 'POST',
     headers: {
@@ -26,10 +26,13 @@ const obtainKrakenToken = async ({email, password}) => {
   const tokenResponse = body?.data?.obtainKrakenToken;
   if (tokenResponse) {
     return {
+      success: true,
       token: tokenResponse?.token,
+      error: null,
     };
   } else {
     return {
+      success: false,
       error: body?.errors[0]?.message,
     };
   }
@@ -62,11 +65,16 @@ const getAccountId = async ({token}) => {
   }
 };
 
-const fetchAgreement = async ({token}) => {
-  const {accountId, error} = await getAccountId({token});
+const fetchTariffFromProvider = async ({token, referenceId}) => {
+  let accountNumber = referenceId;
+  if (!accountNumber) {
+    const {accountId, error} = await getAccountId({token});
 
-  if (error) {
-    return {error};
+    if (error) {
+      return {error};
+    }
+
+    accountNumber = accountId;
   }
 
   const resp = await fetch(API_URL, {
@@ -77,7 +85,7 @@ const fetchAgreement = async ({token}) => {
     },
     body: JSON.stringify({
       query: getPropertiesQuery,
-      variables: {accountNumber: accountId},
+      variables: {accountNumber: accountNumber},
       operationName: 'getProperties',
     }),
   });
@@ -108,9 +116,11 @@ const fetchAgreement = async ({token}) => {
       };
     }
     return {
-      agreement,
-      tariffCode: electricityMeterPoints?.smartTariffOnboarding?.smartTariffCode,
-      clientReferenceId: accountId,
+      tariff: {
+        agreement,
+        tariffCode: electricityMeterPoints?.smartTariffOnboarding?.smartTariffCode,
+        clientReferenceId: accountNumber,
+      },
     };
   } else {
     const errors = body?.errors;
@@ -121,5 +131,5 @@ const fetchAgreement = async ({token}) => {
 };
 
 module.exports = {
-  fetchAgreement, obtainKrakenToken, getAccountId,
+  fetchTariffFromProvider, isValidAuthMetadata, getAccountId,
 };

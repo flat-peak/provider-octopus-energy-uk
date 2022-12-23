@@ -1,5 +1,5 @@
-const {FlatpeakService} = require('@flat-peak/api-service');
-const {convertToTariff} = require('../tariff-processors');
+const {FlatpeakService} = require('@flatpeak/api-service');
+const {adoptProviderTariff} = require('../tariff-processors');
 
 const throwIfError = async (request) => {
   const result = await request;
@@ -9,10 +9,10 @@ const throwIfError = async (request) => {
   return result;
 };
 
-const connectTariff = async (octopusDetails, productId, customerId, credentials, publishableKey) => {
-  const {agreement: octopusAgreement, tariffCode, clientReferenceId} = octopusDetails;
+const connectTariff = async (inputTariff, productId, customerId, credentials, publishableKey) => {
+  const {agreement: octopusAgreement, tariffCode, clientReferenceId} = inputTariff;
   const service = new FlatpeakService(process.env.FLATPEAK_API_URL, publishableKey, true);
-  const plan = convertToTariff(octopusAgreement);
+  const plan = adoptProviderTariff(octopusAgreement);
   const customer = await throwIfError((customerId ? service.getCustomer(customerId) : service.createCustomer({})));
   let product = await throwIfError((productId ? service.getProduct(productId) : service.createProduct({
     customer_id: customer.id,
@@ -31,6 +31,7 @@ const connectTariff = async (octopusDetails, productId, customerId, credentials,
       'integrated': true,
       'tariff_id': tariff.id,
       'auth_metadata': {
+        'reference_id': clientReferenceId,
         'data': credentials,
       },
     },

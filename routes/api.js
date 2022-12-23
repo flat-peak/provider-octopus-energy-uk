@@ -1,43 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const {obtainKrakenToken} = require('../services/octopus.service.js');
-const {connectTariff} = require('../services/flatpeak.service');
-const {fetchAgreement} = require('../services/octopus.service');
-const {convertToTariff} = require('../tariff-processors');
-
-router.post('/connect', function(req, res, next) {
-  const {email, password, pub_key, product_id, customer_id} = req.session;
-  try {
-    obtainKrakenToken({email, password}).then(({token, error}) => {
-      if (error) {
-        throw new Error(error);
-      }
-      return fetchAgreement({token});
-    })
-        .then(({agreement, tariffCode, clientReferenceId, error}) => {
-          if (error) {
-            throw new Error(error);
-          }
-          return connectTariff(
-              {agreement, tariffCode, clientReferenceId},
-              product_id,
-              customer_id,
-              {email, password},
-              pub_key,
-          );
-        })
-        .then((result) => res.send(result))
-        .catch((e) => {
-          console.log(e);
-          res.status(400);
-          res.send({object: 'error', type: 'api_error', message: e.message});
-        });
-  } catch (e) {
-    console.log(e);
-    res.status(500);
-    res.send({object: 'error', type: 'server_error', message: e.message});
-  }
-});
+const {isValidAuthMetadata} = require('../services/octopus.service.js');
+const {fetchTariffFromProvider} = require('../services/octopus.service');
+const {adoptProviderTariff} = require('../tariff-processors');
 
 router.post('/tariff_plan', function(req, res, next) {
   const {auth_metadata} = req.body;
@@ -47,19 +12,18 @@ router.post('/tariff_plan', function(req, res, next) {
     return;
   }
   try {
-    const {email, password} = auth_metadata.data;
-    obtainKrakenToken({email, password})
+    isValidAuthMetadata(auth_metadata.data)
         .then(({token, error}) => {
           if (error) {
             throw new Error(error);
           }
-          return fetchAgreement({token});
+          return fetchTariffFromProvider({token, referenceId: auth_metadata.reference_id});
         })
-        .then(({agreement, error}) => {
+        .then(({tariff, error}) => {
           if (error) {
             throw new Error(error);
           }
-          res.send(convertToTariff(agreement));
+          res.send(adoptProviderTariff(tariff));
         })
         .then((result) => res.send(result))
         .catch((e) => {

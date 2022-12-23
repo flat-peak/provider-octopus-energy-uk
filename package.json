@@ -1,5 +1,5 @@
 {
-  "name": "flatpeak-providers-octopus",
+  "name": "@flatpeak/providers-octopus",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -8,7 +8,7 @@
     "lintfix": "npx eslint . --fix"
   },
   "dependencies": {
-    "@flat-peak/api-service": "github:flat-peak/api-service",
+    "@flatpeak/api-service": "^0.0.3",
     "body-parser": "^1.20.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",

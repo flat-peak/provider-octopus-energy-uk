@@ -1,6 +1,6 @@
 const express = require('express');
 const {captureInputParams, populateTemplate, captureAuthMetaData, respondWithError} = require('../helpers');
-const {obtainKrakenToken, fetchAgreement} = require('../services/octopus.service');
+const {isValidAuthMetadata, fetchTariffFromProvider} = require('../services/octopus.service');
 const {connectTariff} = require('../services/flatpeak.service');
 const router = express.Router();
 
@@ -29,6 +29,7 @@ router.get('/auth', function(req, res, next) {
     res.redirect('/');
     return;
   }
+
   res.render('auth', {
     title: 'Sign in to your account with Octopus Energy',
     ...populateTemplate(req.session),
@@ -40,8 +41,7 @@ router.post('/auth', function(req, res, next) {
     res.redirect('/');
     return;
   }
-  const {email, password} = req.body;
-  captureAuthMetaData(req, res, {email, password});
+  captureAuthMetaData(req, res, req.body);
 });
 
 router.get('/share', function(req, res, next) {
@@ -72,21 +72,18 @@ router.post('/share', function(req, res, next) {
   const {auth_metadata, pub_key, product_id, customer_id} = req.session;
 
   try {
-    obtainKrakenToken(auth_metadata)
+    isValidAuthMetadata(auth_metadata)
         .then(({token, error}) => {
           if (error) {
             throw new Error(error);
           }
-          return fetchAgreement({token});
+          return fetchTariffFromProvider({token});
         })
-        .then(({agreement, tariffCode, clientReferenceId, error}) => {
+        .then(({tariff, error}) => {
           if (error) {
             throw new Error(error);
           }
-          return connectTariff(
-              {agreement, tariffCode, clientReferenceId},
-              product_id, customer_id, auth_metadata, pub_key,
-          );
+          return connectTariff(tariff, product_id, customer_id, auth_metadata, pub_key);
         })
         .then((result) => {
           res.render('success', {
@@ -97,11 +94,11 @@ router.post('/share', function(req, res, next) {
         })
         .catch((e) => {
           console.log(e);
-          respondWithError(e.message);
+          respondWithError(req, res, e.message);
         });
   } catch (e) {
     console.log(e);
-    respondWithError(e.message);
+    respondWithError(req, res, e.message);
   }
 });
 

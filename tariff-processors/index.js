@@ -8,7 +8,7 @@ const processTariff = (octopusTariff) => {
   }
 };
 
-const convertToTariff = (octopusAgreement) => {
+const adoptProviderTariff = (octopusAgreement) => {
   return Object.assign({
     'object': 'tariff',
     'is_connected': true,
@@ -21,5 +21,5 @@ const convertToTariff = (octopusAgreement) => {
 };
 
 module.exports = {
-  convertToTariff,
+  adoptProviderTariff,
 };
