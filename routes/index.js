@@ -1,7 +1,7 @@
 const express = require('express');
-const {captureInputParams, populateTemplate, captureAuthMetaData, respondWithError} = require('../helpers');
-const {isValidAuthMetadata, fetchTariffFromProvider} = require('../services/octopus.service');
-const {connectTariff} = require('../services/flatpeak.service');
+const {captureInputParams, populateTemplate, captureAuthMetaData, respondWithError} = require('../modules/onboarding/helpers');
+const {isValidAuthMetadata, fetchTariffFromProvider} = require('../modules/octopus/octopus.service');
+const {connectTariff} = require('../modules/flatpeak/flatpeak.service');
 const router = express.Router();
 
 router.get('/', function(req, res, next) {

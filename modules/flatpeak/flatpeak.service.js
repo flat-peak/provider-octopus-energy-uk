@@ -1,5 +1,5 @@
 const {FlatpeakService} = require('@flatpeak/api-service');
-const {adoptProviderTariff} = require('../tariff-processors');
+const {adoptProviderTariff} = require('../octopus/tariff-processors');
 
 const throwIfError = async (request) => {
   const result = await request;

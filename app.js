@@ -11,7 +11,7 @@ dotenv.config();
 
 const indexRouter = require('./routes/index');
 const apiRouter = require('./routes/api');
-const {respondWithError} = require('./helpers');
+const {respondWithError} = require('./modules/onboarding/helpers');
 
 const app = express();
 

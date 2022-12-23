@@ -1,5 +1,5 @@
 const {FlatpeakService} = require('@flatpeak/api-service');
-const {isValidAuthMetadata} = require('./services/octopus.service');
+const {isValidAuthMetadata} = require('../octopus/octopus.service');
 
 /**
  * @param {string} last_error
@@ -40,7 +40,6 @@ function captureInputParams(req, res, {pub_key, product_id, customer_id, callbac
       .getAccount()
       .then((account) => {
         if (account.object === 'error') {
-          ;
           respondWithError(req, res, account.message);
           return;
         }
