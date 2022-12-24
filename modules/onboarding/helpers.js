@@ -1,5 +1,5 @@
-const {FlatpeakService} = require('@flat-peak/api-service');
-const {obtainKrakenToken} = require('./services/octopus.service');
+const {FlatpeakService} = require('@flatpeak/api-service');
+const {isValidAuthMetadata} = require('../octopus/octopus.service');
 
 /**
  * @param {string} last_error
@@ -40,7 +40,6 @@ function captureInputParams(req, res, {pub_key, product_id, customer_id, callbac
       .getAccount()
       .then((account) => {
         if (account.object === 'error') {
-          ;
           respondWithError(req, res, account.message);
           return;
         }
@@ -55,7 +54,7 @@ function captureInputParams(req, res, {pub_key, product_id, customer_id, callbac
 }
 
 function captureAuthMetaData(req, res, {email, password}) {
-  obtainKrakenToken({email, password})
+  isValidAuthMetadata({email, password})
       .then(({token, error}) => {
         if (error) {
           req.session.last_error = error;
