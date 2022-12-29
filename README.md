@@ -41,4 +41,4 @@ Add SSL certificates:
 `FLY_API_TOKEN` - get it by running `flyctl auth token`.
 `NPM_TOKEN` - get it from FlatPeak npmjs account.
 
-- Commit to either `staging` or `production`.
+- Commit to either `staging` or `production` for staging and production deployment respectively.
