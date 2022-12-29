@@ -21,14 +21,18 @@ go install golang.org/x/tools/cmd/goimports@latest
 - Run `npm start`
 - copy `.env.blank` to `.env` and set correct details
 
-## Create Fly App (one-off)
+##  One-offs:
+
+Create Fly App:
 
 `fly launch --no-deploy --org flatpeak --name [app name]`
 
 Currently:
-
 staging - stg-octopus-providers-fp
 production - prod-octopus-providers-fp
+
+Add SSL certificates:
+<https://fly.io/docs/app-guides/custom-domains-with-fly/>
 
 ## Deployment with GitHub Actions
 
