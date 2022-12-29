@@ -5,12 +5,6 @@ on:
       - staging
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-
-  FLATPEAK_API_URL: ${{ secrets.FLATPEAK_API_URL }}
-  SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
-  PROVIDER_ID: ${{ secrets.PROVIDER_ID }}
-  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
 jobs:
   deploy:
       name: Deploy app
