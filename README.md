@@ -27,8 +27,8 @@ go install golang.org/x/tools/cmd/goimports@latest
 
 Currently:
 
-staging - staging-octopus_uk-providers-fp
-production - production-octopus_uk-providers-fp
+staging - stg-octopus-providers-fp
+production - prod-octopus-providers-fp
 
 ## Deployment with GitHub Actions
 
