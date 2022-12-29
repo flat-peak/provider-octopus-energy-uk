@@ -1,4 +1,4 @@
-app = "octopus_uk-production-providers-fp"
+app = "staging-octopus-providers-fp"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
