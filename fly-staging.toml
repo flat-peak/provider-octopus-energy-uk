@@ -1,4 +1,4 @@
-app = "octopus-stg-providers-fp"
+app = "octopus-provider-stg-fp"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
