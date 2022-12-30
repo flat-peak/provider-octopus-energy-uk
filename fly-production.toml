@@ -1,11 +1,10 @@
-app = "prod-octopus-providers-fp"
+app = "octopus-provider-prod-fp"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
 [env]
   FLATPEAK_API_URL = "https://api.flatpeak.energy"
-  SESSION_SECRET = "pk_live_XXXXXXXXXXXXXXXXX"
   PROVIDER_ID = "prv_XXXXXXXXXXXXXXXXX"
 
 [experimental]
