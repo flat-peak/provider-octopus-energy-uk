@@ -38,6 +38,9 @@ use one of existing .github/workflows/fly-*.yml as a template.
 
 ##### 4. Add session secret
 Specify a unique secret string for `SESSION_SECRET` variable
+
+`flyctl secrets set -a [app_name] SESSION_SECRET=[secret]`
+
 <https://fly.io/docs/reference/secrets/#setting-secrets>
 
 
