@@ -1,44 +1,54 @@
-# Octopus Energy UK Integration
+## Octopus Energy UK Integration
 
-FlatPeak integraiton with Octopus Energy UK using [Node.JS](<https://nodejs.dev/>) hosted at [Fly.io](https://fly.io) with deployment via GitHub Actions.
+FlatPeak integraiton with Octopus Energy UK using [Node.JS](<https://nodejs.dev/>).
 
-## Install tools
+### Install tools
 
 Tools used to develop this project.
 
 - [Node](https://nodejs.dev)
 - [Flyctl](https://fly.io/docs/flyctl/installing/)
 
-```
-go install golang.org/x/tools/cmd/goimports@latest
-```
 
-## Running locally
+### Run locally
 
 - Clone this repository
-- Run `npm login` to login to npm and access the private `@flatpeak/api-service` package
+- copy `.env.blank` to `.env` and set vars
+- Run `npm login` to login to npm to access `@flatpeak/api-service` package
 - Run `npm install`
 - Run `npm start`
-- copy `.env.blank` to `.env` and set correct details
 
-##  One-offs:
+### Deploy to existing pipeline
 
-Create Fly App:
+Commit your code to either `staging` or `production` Github branches. Deployment will happen automatically via GitHub actions.
 
-`fly launch --no-deploy --org flatpeak --name [app name]`
 
-Currently:
-staging - stg-octopus-providers-fp
-production - prod-octopus-providers-fp
+### Deploy a new app server
 
-Add SSL certificates:
+##### 1. Create new Fly App
+fly launch --no-deploy --org flatpeak --name [app name]`
+
+##### 2. Create new fly*.toml
+clone or create new `.toml` file with your new app name.
+
+##### 3. Create new github action .yml
+use one of existing .github/workflows/fly-*.yml as a template.
+<https://fly.io/docs/app-guides/continuous-deployment-with-github-actions/>
+
+
+##### 4. Add session secret
+Specify a unique secret string for `SESSION_SECRET` variable
+<https://fly.io/docs/reference/secrets/#setting-secrets>
+
+
+##### 5. Add SSL certificates
 <https://fly.io/docs/app-guides/custom-domains-with-fly/>
 
-## Deployment with GitHub Actions
+##### 6. Configure deployment via github actions
 
-- Set repository action secrets for:
+Set repository action secrets for:
 
 `FLY_API_TOKEN` - get it by running `flyctl auth token`.
 `NPM_TOKEN` - get it from FlatPeak npmjs account.
 
-- Commit to either `staging` or `production` for staging and production deployment respectively.
+Commit to code to Github branch as specified in step 3
