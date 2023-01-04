@@ -25,7 +25,8 @@ router.post('/', function(req, res, next) {
 });
 
 router.get('/auth', function(req, res, next) {
-  if (!req.session || !req.session.account) {
+  if (!req.session || !req.session.account || !req.session.provider) {
+    req.session.destroy();
     res.redirect('/');
     return;
   }
