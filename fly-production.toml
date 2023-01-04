@@ -1,11 +1,11 @@
-app = "octopus-provider-stg-fp"
+app = "octopus-provider-prod-fp"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
 [env]
-  FLATPEAK_API_URL = "https://stg-api.flatpeak.energy"
-  PROVIDER_ID = "prv_6319e76eb4a1f6a1dddb726f"
+  FLATPEAK_API_URL = "https://api.flatpeak.energy"
+  PROVIDER_ID = "prv_XXXXXXXXXXXXXXXXX"
 
 [experimental]
   allowed_public_ports = []
