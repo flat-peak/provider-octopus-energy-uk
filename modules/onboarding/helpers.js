@@ -2,31 +2,47 @@ const {FlatpeakService} = require('@flatpeak/api-service');
 const {isValidAuthMetadata} = require('../octopus/octopus.service');
 
 /**
+ * @param {FlatPeak.DisplaySettings} display_settings
+ * @return {LanguageAsset}
+ */
+function extractLanguageAssets(display_settings) {
+  const hasAccountAssets = Array.isArray(display_settings?.language_assets) && display_settings?.language_assets.length;
+  return hasAccountAssets ?
+        (
+            display_settings.language_assets
+                .find((entry) => entry.language_code === display_settings.default_language) ||
+            display_settings.language_assets[0]
+        ) :
+        {};
+}
+
+/**
  * @param {string} last_error
  * @param {string} callback_url
  * @param {FlatPeak.Account} account
+ * @param {FlatPeak.Provider} provider
  * @return {Object}
  */
-function populateTemplate({last_error, callback_url, account}) {
-  const displaySettings = account.display_settings;
-  const hasAssets = Array.isArray(displaySettings?.language_assets) && displaySettings?.language_assets.length;
-  const langAssets = hasAssets ?
-        (
-            displaySettings.language_assets
-                .find((entry) => entry.language_code === displaySettings.default_language) ||
-            displaySettings.language_assets[0]
-            ) :
-        {};
+function populateTemplate({last_error, callback_url, account, provider}) {
+  const accountLanguageSettings = extractLanguageAssets(account.display_settings);
+  const providerLanguageSettings = extractLanguageAssets(provider.display_settings);
 
   return {
     lastError: last_error,
     callbackUrl: callback_url,
-    ProviderDisplayName: 'Octopus Energy',
-    ManufacturerDisplayName: langAssets.display_name,
-    ManufacturerTermsUrl: langAssets.terms_url,
-    ManufacturerPolicyUrl: langAssets.privacy_url,
-    ManufacturerAccentColor: langAssets.accent_color || '#333333',
-    ManufacturerLogoUrl: langAssets.logo_url,
+
+    ProviderDisplayName: providerLanguageSettings.display_name,
+    ProviderPrivacyUrl: providerLanguageSettings.privacy_url,
+    ProviderSupportUrl: providerLanguageSettings.support_url,
+    ProviderTermsUrl: providerLanguageSettings.support_url,
+    ProviderLogoUrl: providerLanguageSettings.logo_url,
+    ProviderAccentColor: provider.display_settings?.graphic_assets?.accent_color || '#333333',
+
+    ManufacturerDisplayName: accountLanguageSettings.display_name,
+    ManufacturerTermsUrl: accountLanguageSettings.terms_url,
+    ManufacturerPolicyUrl: accountLanguageSettings.privacy_url,
+    ManufacturerLogoUrl: accountLanguageSettings.logo_url,
+    ManufacturerAccentColor: account.display_settings?.graphic_assets?.accent_color || '#333333',
   };
 }
 
@@ -36,21 +52,28 @@ function captureInputParams(req, res, {pub_key, product_id, customer_id, callbac
     respondWithError(req, res, 'Publishable key is required to proceed');
     return;
   }
-  service
-      .getAccount()
-      .then((account) => {
-        if (account.object === 'error') {
-          respondWithError(req, res, account.message);
-          return;
-        }
-        req.session.last_error = '';
-        req.session.account = account;
-        req.session.pub_key = pub_key;
-        req.session.product_id = product_id;
-        req.session.customer_id = customer_id;
-        req.session.callback_url = callback_url;
-        res.redirect('/auth');
-      });
+
+  Promise.all([
+    service.getAccount(),
+    service.getProvider(process.env.PROVIDER_ID),
+  ]).then(([account, provider]) => {
+    if (account.object === 'error') {
+      respondWithError(req, res, account.message);
+      return;
+    }
+    if (provider.object === 'error') {
+      respondWithError(req, res, provider.message);
+      return;
+    }
+    req.session.last_error = '';
+    req.session.account = account;
+    req.session.provider = provider;
+    req.session.pub_key = pub_key;
+    req.session.product_id = product_id;
+    req.session.customer_id = customer_id;
+    req.session.callback_url = callback_url;
+    res.redirect('/auth');
+  });
 }
 
 function captureAuthMetaData(req, res, {email, password}) {
