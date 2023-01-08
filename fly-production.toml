@@ -5,7 +5,7 @@ processes = []
 
 [env]
   FLATPEAK_API_URL = "https://api.flatpeak.energy"
-  PROVIDER_ID = "prv_XXXXXXXXXXXXXXXXX"
+  PROVIDER_ID = "prv_6319e76eb4a1f6a1dddb726f"
 
 [experimental]
   allowed_public_ports = []
