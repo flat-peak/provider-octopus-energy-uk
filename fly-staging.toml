@@ -6,6 +6,7 @@ processes = []
 [env]
   FLATPEAK_API_URL = "https://stg-api.flatpeak.energy"
   PROVIDER_ID = "prv_6319e76eb4a1f6a1dddb726f"
+  CLOUDWATCH_GROUP_NAME = "/staging/app/provider/octopus"
 
 [experimental]
   allowed_public_ports = []

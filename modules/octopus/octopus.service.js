@@ -4,7 +4,9 @@ const fetch = require('node-fetch');
 const API_URL = 'https://api.octopus.energy/v1/graphql/';
 
 const getPropertiesQuery = fs.readFileSync(path.resolve(__dirname, 'graphql/getProperties.graphql')).toString();
-const krakenTokenAuthenticationQuery = fs.readFileSync(path.resolve(__dirname, 'graphql/krakenTokenAuthentication.graphql')).toString();
+const krakenTokenAuthenticationQuery = fs.readFileSync(
+    path.resolve(__dirname, 'graphql/krakenTokenAuthentication.graphql'),
+).toString();
 const viewerQuery = fs.readFileSync(path.resolve(__dirname, 'graphql/viewer.graphql')).toString();
 
 const isNotEmptyArray = (object) => Array.isArray(object) && object.length;

@@ -1,8 +1,9 @@
-const { FlatpeakService } = require('@flat-peak/javascript-sdk');
+const {FlatpeakService} = require('@flat-peak/javascript-sdk');
 const {isValidAuthMetadata} = require('../octopus/octopus.service');
+const {logger} = require('../logger/cloudwatch');
 
 /**
- * @param {FlatPeak.DisplaySettings} display_settings
+ * @param {DisplaySettings} display_settings
  * @return {LanguageAsset}
  */
 function extractLanguageAssets(display_settings) {
@@ -19,8 +20,8 @@ function extractLanguageAssets(display_settings) {
 /**
  * @param {string} last_error
  * @param {string} callback_url
- * @param {FlatPeak.Account} account
- * @param {FlatPeak.Provider} provider
+ * @param {Account} account
+ * @param {Provider} provider
  * @return {Object}
  */
 function populateTemplate({last_error, callback_url, account, provider}) {
@@ -47,7 +48,11 @@ function populateTemplate({last_error, callback_url, account, provider}) {
 }
 
 function captureInputParams(req, res, {pub_key, product_id, customer_id, callback_url}) {
-  const service = new FlatpeakService(process.env.FLATPEAK_API_URL, pub_key);
+  const service = new FlatpeakService(
+      process.env.FLATPEAK_API_URL,
+      pub_key,
+      (message) => logger.info(`[SERVICE] ${message}`),
+  );
   if (!pub_key) {
     respondWithError(req, res, 'Publishable key is required to proceed');
     return;
