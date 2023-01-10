@@ -14,7 +14,7 @@ Tools used to develop this project.
 
 - Clone this repository
 - copy `.env.blank` to `.env` and set vars
-- Run `npm login` to login to npm to access `@flatpeak/api-service` package
+- Run `npm login` to login to npm to access `@flat-peak/javascript-sdk` package
 - Run `npm install`
 - Run `npm start`
 

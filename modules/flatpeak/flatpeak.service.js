@@ -1,4 +1,4 @@
-const {FlatpeakService} = require('@flatpeak/api-service');
+const { FlatpeakService } = require('@flat-peak/javascript-sdk');
 const {adoptProviderTariff} = require('../octopus/tariff-processors');
 
 const throwIfError = async (request) => {
