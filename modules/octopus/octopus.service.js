@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const fetch = require('node-fetch');
+const {logger} = require('../logger/cloudwatch');
 const API_URL = 'https://api.octopus.energy/v1/graphql/';
 
 const getPropertiesQuery = fs.readFileSync(path.resolve(__dirname, 'graphql/getProperties.graphql')).toString();

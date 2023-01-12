@@ -28,7 +28,7 @@ router.post('/tariff_plan', function(req, res, next) {
           if (error) {
             throw new Error(error);
           }
-          res.send(adoptProviderTariff(tariff));
+          res.send(adoptProviderTariff(tariff.agreement));
         })
         .then((result) => res.send(result))
         .catch((e) => {
