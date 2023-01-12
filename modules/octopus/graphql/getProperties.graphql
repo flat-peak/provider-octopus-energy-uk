@@ -8,10 +8,12 @@ query getProperties($accountNumber: String!, $propertiesActiveFrom: DateTime) {
       occupancyPeriods {
         effectiveFrom
         effectiveTo
+        __typename
       }
       coordinates {
         latitude
         longitude
+        __typename
       }
       electricityMeterPoints {
         __typename
@@ -25,33 +27,69 @@ query getProperties($accountNumber: String!, $propertiesActiveFrom: DateTime) {
           meterType
           importMeter {
             id
+            __typename
           }
           smartDevices {
             paymentMode
             deviceId
+            __typename
           }
+          __typename
         }
         agreements {
           id
           validFrom
           validTo
           isRevoked
+          unitRateUplifts {
+            unitRateUplift
+            __typename
+          }
           tariff {
             __typename
+            ... on TariffType {
+              standingCharge
+              preVatStandingCharge
+              displayName
+              fullName
+              __typename
+            }
+            ... on StandardTariff {
+              unitRate
+              preVatUnitRate
+              __typename
+            }
+            ... on DayNightTariff {
+              dayRate
+              preVatDayRate
+              nightRate
+              preVatNightRate
+              __typename
+            }
             ... on HalfHourlyTariff {
               unitRates {
                 value
                 validFrom
                 validTo
+                __typename
               }
+              productCode
+              __typename
+            }
+            ... on PrepayTariff {
+              unitRate
+              preVatUnitRate
+              __typename
             }
           }
+          __typename
         }
         enrolment {
           status
           supplyStartDate
           switchStartDate
           previousSupplier
+          __typename
         }
         smartStartDate
         smartTariffOnboarding {
@@ -60,6 +98,7 @@ query getProperties($accountNumber: String!, $propertiesActiveFrom: DateTime) {
           latestStatus
           latestTermsStatus
           smartTariffCode
+          __typename
         }
         status
       }
@@ -73,13 +112,19 @@ query getProperties($accountNumber: String!, $propertiesActiveFrom: DateTime) {
           smartDevices {
             paymentMode
             deviceId
+            __typename
           }
+          __typename
         }
         agreements {
           id
           validFrom
           validTo
           isRevoked
+          unitRateUplifts {
+            unitRateUplift
+            __typename
+          }
           tariff {
             displayName
             fullName
@@ -87,17 +132,26 @@ query getProperties($accountNumber: String!, $propertiesActiveFrom: DateTime) {
             preVatUnitRate
             standingCharge
             preVatStandingCharge
+            __typename
           }
+          __typename
         }
         enrolment {
           status
           supplyStartDate
           switchStartDate
           previousSupplier
+          __typename
         }
         smartStartDate
         status
       }
+      __typename
     }
+    __typename
+  }
+  viewer {
+    isOptedInToWof
+    __typename
   }
 }
