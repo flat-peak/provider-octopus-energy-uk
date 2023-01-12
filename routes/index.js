@@ -1,7 +1,10 @@
 const express = require('express');
-const {captureInputParams, populateTemplate, captureAuthMetaData, respondWithError} = require('../modules/onboarding/helpers');
+const {
+  captureInputParams, populateTemplate, captureAuthMetaData, respondWithError,
+} = require('../modules/onboarding/helpers');
 const {isValidAuthMetadata, fetchTariffFromProvider} = require('../modules/octopus/octopus.service');
 const {connectTariff} = require('../modules/flatpeak/flatpeak.service');
+const {logger} = require('../modules/logger/cloudwatch');
 const router = express.Router();
 
 router.get('/', function(req, res, next) {
@@ -94,11 +97,11 @@ router.post('/share', function(req, res, next) {
           });
         })
         .catch((e) => {
-          console.log(e);
+          logger.error(e);
           respondWithError(req, res, e.message);
         });
   } catch (e) {
-    console.log(e);
+    logger.error(e);
     respondWithError(req, res, e.message);
   }
 });
