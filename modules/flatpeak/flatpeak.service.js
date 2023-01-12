@@ -1,5 +1,6 @@
 const {FlatpeakService} = require('@flat-peak/javascript-sdk');
 const {adoptProviderTariff} = require('../octopus/tariff-processors');
+const {logger} = require('../logger/cloudwatch');
 
 const throwIfError = async (request) => {
   const result = await request;
