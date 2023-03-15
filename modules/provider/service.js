@@ -35,9 +35,11 @@ const isValidAuthMetadata = async ({email, password}) => {
       error: null,
     };
   } else {
+    const message = body?.errors[0]?.message;
+    logger.error(`Failed to obtain kraken token ${email} : ${password} from ${API_URL}, response: ${message}`);
     return {
       success: false,
-      error: body?.errors[0]?.message,
+      error: message,
     };
   }
 };

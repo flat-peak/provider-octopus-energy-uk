@@ -1,5 +1,5 @@
 const {FlatpeakService} = require('@flat-peak/javascript-sdk');
-const {isValidAuthMetadata} = require('../octopus/octopus.service');
+const {isValidAuthMetadata} = require('../provider/service');
 const {logger} = require('../logger/cloudwatch');
 
 /**

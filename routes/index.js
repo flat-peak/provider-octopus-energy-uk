@@ -2,7 +2,7 @@ const express = require('express');
 const {
   captureInputParams, populateTemplate, captureAuthMetaData, respondWithError,
 } = require('../modules/onboarding/helpers');
-const {isValidAuthMetadata, fetchTariffFromProvider} = require('../modules/octopus/octopus.service');
+const {isValidAuthMetadata, fetchTariffFromProvider} = require('../modules/provider/service');
 const {connectTariff} = require('../modules/flatpeak/flatpeak.service');
 const {logger} = require('../modules/logger/cloudwatch');
 const router = express.Router();

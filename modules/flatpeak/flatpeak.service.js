@@ -1,5 +1,5 @@
 const {FlatpeakService} = require('@flat-peak/javascript-sdk');
-const {adoptProviderTariff} = require('../octopus/tariff-processors');
+const {adoptProviderTariff} = require('../provider/tariff-processors');
 const {logger} = require('../logger/cloudwatch');
 
 const throwIfError = async (request) => {
@@ -11,13 +11,13 @@ const throwIfError = async (request) => {
 };
 
 const connectTariff = async (inputTariff, productId, customerId, credentials, publishableKey) => {
-  const {agreement: octopusAgreement, tariffCode, clientReferenceId} = inputTariff;
+  const {agreement: providerAgreement, tariffCode, clientReferenceId} = inputTariff;
   const service = new FlatpeakService(
       process.env.FLATPEAK_API_URL,
       publishableKey,
       (message) => logger.info(`[SERVICE] ${message}`),
   );
-  const plan = adoptProviderTariff(octopusAgreement);
+  const plan = adoptProviderTariff(providerAgreement);
   const customer = await throwIfError((customerId ? service.getCustomer(customerId) : service.createCustomer({})));
   let product = await throwIfError((productId ? service.getProduct(productId) : service.createProduct({
     customer_id: customer.id,
