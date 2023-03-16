@@ -1,6 +1,6 @@
 ## Octopus Energy UK Integration
 
-FlatPeak integraiton with Octopus Energy UK using [Node.JS](<https://nodejs.dev/>).
+FlatPeak integration with Octopus Energy UK using [Node.JS](<https://nodejs.dev/>).
 
 ### Install tools
 

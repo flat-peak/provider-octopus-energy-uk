@@ -1,6 +1,6 @@
 const {destructDate, calcSeconds} = require('./util');
-const processHalfHourlyTariff = (octopusTariff) => {
-  const hours = octopusTariff.unitRates
+const processHalfHourlyTariff = (providerTariff) => {
+  const hours = providerTariff.unitRates
       .reduce((acc, rate) => {
         const {
           day: dayFrom, hours: hoursFrom, minutes: minutesFrom, seconds: secondsFrom,
@@ -13,7 +13,7 @@ const processHalfHourlyTariff = (octopusTariff) => {
           acc.push({
             fromTime: calcSeconds(secondsFrom, minutesFrom, hoursFrom),
             data: {
-              cost: rate.value,
+              cost: rate.value / 100,
               valid_from: [hoursFrom, minutesFrom, secondsFrom].join(':'),
               valid_to: [hoursTo, minutesTo, secondsTo].join(':'),
             },
@@ -22,14 +22,14 @@ const processHalfHourlyTariff = (octopusTariff) => {
           acc.push({
             fromTime: calcSeconds(secondsFrom, minutesFrom, hoursFrom),
             data: {
-              cost: rate.value,
+              cost: rate.value / 100,
               valid_from: [hoursFrom, minutesFrom, secondsFrom].join(':'),
               valid_to: '00:00:00',
             },
           }, {
             fromTime: 0,
             data: {
-              cost: rate.value,
+              cost: rate.value / 100,
               valid_from: '00:00:00',
               valid_to: [hoursTo, minutesTo, secondsTo].join(':'),
             },
@@ -43,7 +43,7 @@ const processHalfHourlyTariff = (octopusTariff) => {
       .map((rate) => rate.data);
 
   return {
-    'time_expiry': new Date(octopusTariff.unitRates[octopusTariff.unitRates.length - 1].validTo).toISOString(),
+    'time_expiry': new Date(providerTariff.unitRates[providerTariff.unitRates.length - 1].validTo).toISOString(),
     'import': [
       {
         'data': [

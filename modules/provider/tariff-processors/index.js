@@ -2,18 +2,18 @@ const {processHalfHourlyTariff} = require('./half-hourly');
 const {logger} = require('../../logger/cloudwatch');
 const {processStandardTariff} = require('./standard');
 
-const processTariff = (octopusTariff) => {
-  switch (octopusTariff.__typename) {
+const processTariff = (providerTariff) => {
+  switch (providerTariff.__typename) {
     case 'StandardTariff':
-      return processStandardTariff(octopusTariff);
+      return processStandardTariff(providerTariff);
     case 'HalfHourlyTariff':
-      return processHalfHourlyTariff(octopusTariff);
+      return processHalfHourlyTariff(providerTariff);
     default:
-      throw new Error('Unknown tariff type: ' + octopusTariff.__typename);
+      throw new Error('Unknown tariff type: ' + providerTariff.__typename);
   }
 };
 
-const adoptProviderTariff = (octopusAgreement) => {
+const adoptProviderTariff = (providerAgreement) => {
   try {
     return Object.assign({
       'object': 'tariff',
@@ -23,9 +23,9 @@ const adoptProviderTariff = (octopusAgreement) => {
       'time_expiry': undefined,
       'import': undefined,
       'export': undefined,
-    }, processTariff(octopusAgreement.tariff));
+    }, processTariff(providerAgreement.tariff));
   } catch (e) {
-    logger.error(`Can't adopt a tariff ${JSON.stringify(octopusAgreement)}`);
+    logger.error(`Can't adopt a tariff ${JSON.stringify(providerAgreement)}`);
     logger.error(e);
     throw e;
   }

@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const {isValidAuthMetadata} = require('../modules/octopus/octopus.service.js');
-const {fetchTariffFromProvider} = require('../modules/octopus/octopus.service');
-const {adoptProviderTariff} = require('../modules/octopus/tariff-processors');
+const {fetchTariffFromProvider, isValidAuthMetadata} = require('../modules/provider/service');
+const {adoptProviderTariff} = require('../modules/provider/tariff-processors');
 const {logger} = require('../modules/logger/cloudwatch');
 
 router.post('/tariff_plan', function(req, res, next) {
