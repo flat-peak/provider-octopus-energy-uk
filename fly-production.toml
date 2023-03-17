@@ -1,10 +1,13 @@
-app = "octopus-provider-prod-fp"
+# fly.toml file generated for octopus-energy-uk-provider-prod-fp on 2023-03-17T22:30:28+02:00
+
+app = "octopus-energy-uk-provider-prod-fp"
 kill_signal = "SIGINT"
 kill_timeout = 5
+primary_region = "lhr"
 processes = []
 
 [env]
-  CLOUDWATCH_GROUP_NAME = "/production/app/provider/octopus"
+  CLOUDWATCH_GROUP_NAME = "/production/app/provider/octopus-energy-uk"
   FLATPEAK_API_URL = "https://api.flatpeak.energy"
   PROVIDER_ID = "prv_6319e76eb4a1f6a1dddb726f"
 
