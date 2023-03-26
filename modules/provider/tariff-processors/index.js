@@ -13,19 +13,20 @@ const processTariff = (providerTariff) => {
   }
 };
 
-const adoptProviderTariff = (providerAgreement) => {
+const adoptProviderTariff = ({agreement}) => {
   try {
     return Object.assign({
       'object': 'tariff',
+      'display_name': agreement.tariff.displayName,
       'is_connected': true,
       'product_id': undefined,
       'timezone': 'Europe/London',
       'time_expiry': undefined,
       'import': undefined,
       'export': undefined,
-    }, processTariff(providerAgreement.tariff));
+    }, processTariff(agreement.tariff));
   } catch (e) {
-    logger.error(`Can't adopt a tariff ${JSON.stringify(providerAgreement)}`);
+    logger.error(`Can't adopt a tariff ${JSON.stringify(agreement)}`);
     logger.error(e);
     throw e;
   }

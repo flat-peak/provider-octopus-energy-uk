@@ -11,13 +11,13 @@ const throwIfError = async (request) => {
 };
 
 const connectTariff = async (inputTariff, productId, customerId, credentials, publishableKey) => {
-  const {agreement: providerAgreement, tariffCode, clientReferenceId} = inputTariff;
+  const {tariffCode, clientReferenceId} = inputTariff;
   const service = new FlatpeakService(
       process.env.FLATPEAK_API_URL,
       publishableKey,
       (message) => logger.info(`[SERVICE] ${message}`),
   );
-  const plan = adoptProviderTariff(providerAgreement);
+  const plan = adoptProviderTariff(inputTariff);
   const customer = await throwIfError((customerId ? service.getCustomer(customerId) : service.createCustomer({})));
   let product = await throwIfError((productId ? service.getProduct(productId) : service.createProduct({
     customer_id: customer.id,

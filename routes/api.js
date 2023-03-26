@@ -5,10 +5,7 @@ const {adoptProviderTariff} = require('../modules/provider/tariff-processors');
 const {logger} = require('../modules/logger/cloudwatch');
 
 router.post('/tariff_plan', function(req, res, next) {
-  let {auth_metadata} = req.body;
-  if (auth_metadata?.data?.data) { // FIXME: remove temporary fix when redundant level is removed
-    auth_metadata = auth_metadata?.data;
-  }
+  const {auth_metadata} = req.body;
   if (!auth_metadata || !auth_metadata.data || !auth_metadata.data.email || !auth_metadata.data.password) {
     logger.error(`INVALID auth_metadata ${JSON.stringify(auth_metadata)}`);
     res.status(422);
@@ -27,7 +24,7 @@ router.post('/tariff_plan', function(req, res, next) {
           if (error) {
             throw new Error(error);
           }
-          res.send(adoptProviderTariff(tariff.agreement));
+          res.send(adoptProviderTariff(tariff));
         })
         .then((result) => res.send(result))
         .catch((e) => {

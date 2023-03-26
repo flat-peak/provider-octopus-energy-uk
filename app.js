@@ -7,7 +7,9 @@ const {create} = require('express-handlebars');
 const sessions = require('express-session');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
-dotenv.config();
+dotenv.config({
+  path: path.join(__dirname, '.env'),
+});
 
 const indexRouter = require('./routes/index');
 const apiRouter = require('./routes/api');
@@ -17,6 +19,7 @@ const app = express();
 
 // view engine setup
 const views = path.join(__dirname, 'views');
+app.set('views', views);
 
 const hbs = create({
   extname: '.hbs',
