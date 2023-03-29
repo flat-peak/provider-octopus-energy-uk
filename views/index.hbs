@@ -1,5 +1,5 @@
 <form name="redirect" method="post" action="/">
-    <input type="hidden" name="pub_key" />
+    <input type="hidden" name="publishable_key" />
     <input type="hidden" name="product_id" />
     <input type="hidden" name="customer_id" />
     <input type="hidden" name="callback_url" />
@@ -8,7 +8,7 @@
     window.addEventListener("load", function () {
         const form = document.querySelector('form[name=redirect]')
         Object.entries({
-            'pub_key': window.FLATPEAK_PUBLISHABLE_KEY || '',
+            'publishable_key': window.FLATPEAK_PUBLISHABLE_KEY || '',
             'product_id': window.FLATPEAK_PRODUCT_ID || '',
             'customer_id': window.FLATPEAK_CUSTOMER_ID || '',
             'callback_url': window.FLATPEAK_CALLBACK_URL || ''

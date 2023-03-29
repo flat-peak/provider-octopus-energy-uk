@@ -48,7 +48,7 @@ describe('Octopus Energy UK -> E2E', () => {
 
       it('should pass initial params with post data', async () => {
         const authResponse = await request(app).post('/').send({
-          'pub_key': process.env.TEST_PUBLISHABLE_KEY,
+          'publishable_key': process.env.TEST_PUBLISHABLE_KEY,
           'product_id': null,
           'customer_id': null,
           'callback_url': null,

@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const fetch = require('node-fetch');
+const {adoptProviderTariff} = require('./tariff-processors');
 const {logger} = require('../logger/cloudwatch');
 const API_URL = 'https://api.octopus.energy/v1/graphql/';
 
@@ -124,8 +125,8 @@ const fetchTariffFromProvider = async ({token, referenceId}) => {
     return {
       tariff: {
         agreement,
-        tariffCode: electricityMeterPoints?.smartTariffOnboarding?.smartTariffCode,
-        clientReferenceId: accountNumber,
+        tariff_code: electricityMeterPoints?.smartTariffOnboarding?.smartTariffCode,
+        reference_id: accountNumber,
       },
     };
   } else {
@@ -137,5 +138,5 @@ const fetchTariffFromProvider = async ({token, referenceId}) => {
 };
 
 module.exports = {
-  fetchTariffFromProvider, isValidAuthMetadata, getAccountId,
+  fetchTariffFromProvider, isValidAuthMetadata, adoptProviderTariff,
 };

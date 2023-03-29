@@ -13,11 +13,12 @@ const processTariff = (providerTariff) => {
   }
 };
 
-const adoptProviderTariff = ({agreement}) => {
+const adoptProviderTariff = ({agreement, tariff_code, reference_id}) => {
   try {
     return Object.assign({
       'object': 'tariff',
       'display_name': agreement.tariff.displayName,
+      'reference_id': reference_id,
       'is_connected': true,
       'product_id': undefined,
       'timezone': 'Europe/London',
