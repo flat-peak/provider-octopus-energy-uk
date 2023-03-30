@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const fetch = require('node-fetch');
-const {adoptProviderTariff} = require('./tariff-processors');
+const {convert} = require('./tariff-processors');
 const {logger} = require('../logger/cloudwatch');
 const API_URL = 'https://api.octopus.energy/v1/graphql/';
 
@@ -13,7 +13,7 @@ const viewerQuery = fs.readFileSync(path.resolve(__dirname, 'graphql/viewer.grap
 
 const isNotEmptyArray = (object) => Array.isArray(object) && object.length;
 
-const isValidAuthMetadata = async ({email, password}) => {
+const authorise = async ({email, password}) => {
   const resp = await fetch(API_URL, {
     method: 'POST',
     headers: {
@@ -72,7 +72,7 @@ const getAccountId = async ({token}) => {
   }
 };
 
-const fetchTariffFromProvider = async ({token, referenceId}) => {
+const capture = async ({token, referenceId}) => {
   let accountNumber = referenceId;
   if (!accountNumber) {
     const {accountId, error} = await getAccountId({token});
@@ -138,5 +138,5 @@ const fetchTariffFromProvider = async ({token, referenceId}) => {
 };
 
 module.exports = {
-  fetchTariffFromProvider, isValidAuthMetadata, adoptProviderTariff,
+  capture, authorise, convert,
 };

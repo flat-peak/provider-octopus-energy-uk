@@ -13,7 +13,7 @@ const processTariff = (providerTariff) => {
   }
 };
 
-const adoptProviderTariff = ({agreement, tariff_code, reference_id}) => {
+const convert = ({agreement, tariff_code, reference_id}) => {
   try {
     return Object.assign({
       'object': 'tariff',
@@ -34,5 +34,5 @@ const adoptProviderTariff = ({agreement, tariff_code, reference_id}) => {
 };
 
 module.exports = {
-  adoptProviderTariff,
+  convert,
 };
