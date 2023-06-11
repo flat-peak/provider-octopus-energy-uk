@@ -1,10 +1,10 @@
-<h1 class="title">Share your tariff <br/> with {{{ManufacturerDisplayName}}}</h1>
+<h1 class="title">Data sharing consent</h1>
 
 <form name="reset" action="/cancel" method="post" style="display: none"></form>
 
-<form name="share" class="form" action="/share" method="post" style="--accent-color: {{{ManufacturerAccentColor}}}">
-    <img src="{{{ManufacturerLogoUrl}}}" alt="" class="logo">
-    <p>{{{ManufacturerDisplayName}}} wants to access your account</p>
+<form name="share" class="form" action="/share" method="post" style="--accent-color: {{{ProviderAccentColor}}}">
+    <img src="{{{ProviderLogoUrl}}}" alt="" class="logo">
+    <p><strong>{{{ManufacturerDisplayName}}}</strong> wants to access your account with {{{ProviderDisplayName}}}</p>
 
     <div class="share-disclaimer">
         <p> This will allow them to view your:</p>
@@ -14,9 +14,9 @@
             <li>Account number</li>
         </ul>
 
-        <p>Make sure that you know who is {{{ManufacturerDisplayName}}}</p>
+        <p>Make sure that you know who they are.</p>
 
-        <p class="additional">You may be sharing sensitive info with this site or app.  Learn about how {{{ManufacturerDisplayName}}} will handle your data by reviewing their <a href="{{{ManufacturerTermsUrl}}}">privacy policy</a> and <a href="{{{ManufacturerPolicyUrl}}}">terms of service</a>. You can always see or remove access by contacting {{{ManufacturerDisplayName}}} support</p>
+        <p class="additional">You may be sharing sensitive info with this site or app.  Learn about how {{{ManufacturerDisplayName}}} will handle your data by reviewing their <a href="{{{ManufacturerPolicyUrl}}}">privacy policy</a> and <a href="{{{ManufacturerTermsUrl}}}">terms of service</a>. You can always see or remove access by contacting support</p>
     </div>
 
     <div class="buttons">

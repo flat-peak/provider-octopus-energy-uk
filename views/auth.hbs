@@ -1,10 +1,10 @@
-<h1 class="title">Connect your account <br/> with {{{ProviderDisplayName}}}</h1>
+<h1 class="title">Connect your account</h1>
 
 <p class="gdpr-description">
-	<strong>IMPORTANT:</strong> By submitting your details, you will be sharing them with <strong>{{{ManufacturerDisplayName}}}</strong>. Your data will be stored and processed in strict compliance with GDPR. Review the full <a href="{{{ManufacturerPolicyUrl}}}">privacy policy</a>.
+	<strong>NOTE:</strong> By submitting your details, you will be sharing them with <strong>{{{ManufacturerDisplayName}}}</strong>. Your data will be stored and processed in strict compliance with GDPR. Review full <a href="{{{ManufacturerPolicyUrl}}}">privacy policy</a>.
 </p>
 
-<form name="auth" class="form" action="/auth" method="post">
+<form name="auth" class="form" action="/auth" method="post" style="--accent-color: {{{ProviderAccentColor}}}">
     <img src="{{{ProviderLogoUrl}}}" alt="" class="logo">
     <input type="email" name="email" placeholder="Email address" value="">
     <input type="password" autocapitalize="off" spellcheck="false" name="password" placeholder="Password" value="">
