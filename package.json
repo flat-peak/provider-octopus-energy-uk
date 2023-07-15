@@ -11,7 +11,7 @@
   "main": "app.js",
   "dependencies": {
     "@flat-peak/javascript-sdk": "^1.0.7",
-    "@flat-peak/express-integration-sdk": "1.0.3",
+    "@flat-peak/express-integration-sdk": "1.0.5",
     "body-parser": "^1.20.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",

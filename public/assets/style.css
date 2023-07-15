@@ -22,7 +22,7 @@ a {
 }
 
 .page {
-    padding: 12px 0;
+    padding: 24px 0 12px;
     min-width: 335px;
     max-width: 335px;
     box-sizing: border-box;
@@ -41,7 +41,7 @@ a {
 .title {
     font-family: 'SF Pro Display';
     font-style: normal;
-    font-weight: 700;
+    font-weight: 400;
     font-size: 25px;
     line-height: 30px;
     color: #000000;
