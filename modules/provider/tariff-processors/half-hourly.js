@@ -1,4 +1,5 @@
 const {destructDate, calcSeconds} = require('./util');
+const exactMath = require('exact-math');
 const processHalfHourlyTariff = (providerTariff) => {
   const hours = providerTariff.unitRates
       .reduce((acc, rate) => {
@@ -13,7 +14,7 @@ const processHalfHourlyTariff = (providerTariff) => {
           acc.push({
             fromTime: calcSeconds(secondsFrom, minutesFrom, hoursFrom),
             data: {
-              cost: rate.value / 100,
+              cost: exactMath.div(rate.value, 100),
               valid_from: [hoursFrom, minutesFrom, secondsFrom].join(':'),
               valid_to: [hoursTo, minutesTo, secondsTo].join(':'),
             },
@@ -22,14 +23,14 @@ const processHalfHourlyTariff = (providerTariff) => {
           acc.push({
             fromTime: calcSeconds(secondsFrom, minutesFrom, hoursFrom),
             data: {
-              cost: rate.value / 100,
+              cost: exactMath.div(rate.value, 100),
               valid_from: [hoursFrom, minutesFrom, secondsFrom].join(':'),
               valid_to: '00:00:00',
             },
           }, {
             fromTime: 0,
             data: {
-              cost: rate.value / 100,
+              cost: exactMath.div(rate.value, 100),
               valid_from: '00:00:00',
               valid_to: [hoursTo, minutesTo, secondsTo].join(':'),
             },
