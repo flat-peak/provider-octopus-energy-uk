@@ -19,7 +19,7 @@ const convert = ({agreement, tariff_code, reference_id}) => {
       'object': 'tariff',
       'display_name': agreement.tariff.displayName,
       'reference_id': reference_id,
-      'is_connected': true,
+      'integrated': true,
       'product_id': undefined,
       'timezone': 'Europe/London',
       'time_expiry': undefined,
