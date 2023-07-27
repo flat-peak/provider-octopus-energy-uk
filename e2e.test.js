@@ -138,7 +138,7 @@ describe('Octopus Energy UK -> E2E', () => {
         const tariff = await service.getTariff(result.tariff_id);
 
         expect(tariff.object).toBe('tariff');
-        // expect(tariff.is_connected).toBeTruthy();
+        expect(tariff.integrated).toBeTruthy();
         expect(tariff.import.length).toBeGreaterThan(0);
         expect(tariff.import[0].data.length).toBeGreaterThan(0);
         expect(tariff.display_name).toBeTruthy();
@@ -154,7 +154,7 @@ describe('Octopus Energy UK -> E2E', () => {
         const tariff = result.body;
 
         expect(tariff.object).toBe('tariff');
-        expect(tariff.is_connected).toBeTruthy();
+        expect(tariff.integrated).toBeTruthy();
         expect(tariff.import.length).toBeGreaterThan(0);
         expect(tariff.import[0].data.length).toBeGreaterThan(0);
         expect(tariff.display_name).toBeTruthy();
