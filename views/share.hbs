@@ -1,9 +1,15 @@
 <h1 class="title">Data sharing consent</h1>
 
-<form name="reset" action="/cancel" method="post" style="display: none"></form>
+<form name="reset" action="/cancel" method="post" style="display: none">
+    <input type="hidden" name="auth" value="{{{Authorisation}}}">
+    <input type="hidden" name="state" value="{{{SharedState}}}">
+</form>
 
-<form name="share" class="form" action="/share" method="post" style="--accent-color: {{{ProviderAccentColor}}}">
+<form name="share" class="form" action="/share/capture" method="post" style="--accent-color: {{{ProviderAccentColor}}}">
+    <input type="hidden" name="auth" value="{{{Authorisation}}}">
+    <input type="hidden" name="state" value="{{{SharedState}}}">
     <img src="{{{ProviderLogoUrl}}}" alt="" class="logo">
+
     <p><strong>{{{ManufacturerDisplayName}}}</strong> wants to access your account with {{{ProviderDisplayName}}}</p>
 
     <div class="share-disclaimer">

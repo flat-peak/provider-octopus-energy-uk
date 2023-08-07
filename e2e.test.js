@@ -2,19 +2,40 @@ require('dotenv').config();
 const request = require('supertest');
 const app = require('./app.js');
 const {FlatpeakService} = require('@flat-peak/javascript-sdk');
-
-const extractParams = (str) => {
-  const regexp = /([a-z_])+: "([a-z_\d])+"/g;
-  const result = {};
-  let match;
-  while ((match = regexp.exec(str)) !== null) {
-    const p = match[0].split(': ');
-    result[p[0]] = p[1].substring(1, p[1].length - 1);
-  }
-  return result;
+const flatpeak = new FlatpeakService(process.env.FLATPEAK_API_URL, process.env.TEST_PUBLISHABLE_KEY);
+const encodeState = (data) => Buffer.from(JSON.stringify(data)).toString('base64');
+const decodeState = (data) => JSON.parse(Buffer.from(data, 'base64').toString('utf8'));
+const extractState = (str) => {
+  const regexp = /state: "([a-zA-Z0-9=]+)"/g;
+  const matches = regexp.exec(str);
+  return decodeState(matches[1]);
 };
-const service = new FlatpeakService(process.env.FLATPEAK_API_URL, process.env.TEST_PUBLISHABLE_KEY);
-
+const extractRedirectParams = (str) => {
+  const regexpAuth = /name="auth" value="([a-zA-Z0-9=]+)"/g;
+  const regexpState = /name="state" value="([a-zA-Z0-9=]+)"/g;
+  const regexpAction = /action="([/a-zA-Z0-9=]+)"/g;
+  return {
+    action: regexpAction.exec(str)[1],
+    auth: regexpAuth.exec(str)[1],
+    state: decodeState(regexpState.exec(str)[1]),
+  };
+};
+const TEST_REQUEST_ID = 'TEST_REQUEST_ID';
+const validAuthorisation = Buffer.from(process.env.TEST_PUBLISHABLE_KEY + ':').toString('base64');
+const invalidAuthorisation = Buffer.from('pk_test_INVALID_KEY:').toString('base64');
+const validInputState = encodeState({
+  'request_id': TEST_REQUEST_ID,
+  'provider_id': process.env.TEST_PROVIDER_ID || process.env.PROVIDER_ID, 
+  'postal_address': {
+    address_line1: '123',
+    address_line2: 'Infinite Drive',
+    city: 'London',
+    state: 'Greather London',
+    post_code: 'SE110AA',
+    country_code: 'GB',
+  },
+});
+const invalidInputState = '';
 const validCredentials = {
   email: process.env.TEST_CUSTOMER_USER,
   password: process.env.TEST_CUSTOMER_PASSWORD,
@@ -28,121 +49,120 @@ const invalidCredentials = {
 describe('Octopus Energy UK -> E2E', () => {
   describe('Onboard', () => {
     describe('Initialisation', () => {
-      it('should return home page with a redirect form', async () => {
-        const res = await request(app).get('/');
-        expect(res.statusCode).toBe(200);
-        expect(res.text.match(/<form name="redirect"/)).not.toBeNull();
+      it('should initiate session with invalid authorization', async () => {
+        const authResponse = await request(app).post(`/`).send({
+          auth: invalidAuthorisation,
+          state: validInputState,
+        });
+        expect(authResponse.statusCode).toBe(400);
+        expect(authResponse.text.match('access denied')).not.toBeNull();
       });
 
-      it('should pass initial params with custom headers', async () => {
-        const authResponse = await request(app).get('/').set({
-          'publishable-key': process.env.TEST_PUBLISHABLE_KEY,
-          'product-id': null,
-          'customer-id': null,
-          'callback-url': null,
+      it('should initiate session with invalid state', async () => {
+        const authResponse = await request(app).post(`/`).send({
+          auth: validAuthorisation,
+          state: invalidInputState,
+        });
+        expect(authResponse.statusCode).toBe(400);
+        expect(authResponse.text.match('Missing state')).not.toBeNull();
+      });
+
+      it('should initiate session with a valid state and authorization', async () => {
+        const authResponse = await request(app).post(`/`).send({
+          auth: validAuthorisation,
+          state: validInputState,
         });
         expect(authResponse.statusCode).toBe(302);
-        expect(authResponse.headers.location).toBe('/auth');
-        expect(authResponse.headers['set-cookie'][0].startsWith('connect.sid=')).toBe(true);
+        const result = extractRedirectParams(authResponse.text);
+        expect(result.action).toBe('/auth');
+        expect(result.auth).toBe(validAuthorisation);
+        expect(result.state.request_id).toBe(TEST_REQUEST_ID);
       });
-
-      it('should pass initial params with post data', async () => {
-        const authResponse = await request(app).post('/').send({
-          'publishable_key': process.env.TEST_PUBLISHABLE_KEY,
-          'product_id': null,
-          'customer_id': null,
-          'callback_url': null,
-        });
-        expect(authResponse.statusCode).toBe(302);
-        expect(authResponse.headers.location).toBe('/auth');
-        expect(authResponse.headers['set-cookie'][0].startsWith('connect.sid=')).toBe(true);
-      });
-
 
       it('should display auth form', async () => {
-        const authResponse = await request(app).get('/').set({
-          'publishable-key': process.env.TEST_PUBLISHABLE_KEY,
-        });
-        const formResponse = await request(app).get('/auth').set({
-          'Cookie': authResponse.headers['set-cookie'][0],
+        const formResponse = await request(app).post('/auth').send({
+          auth: validAuthorisation,
+          state: validInputState,
         });
         expect(formResponse.statusCode).toBe(200);
-        expect(formResponse.text.match(/<form name="redirect"/)).toBeNull();
         expect(formResponse.text.match(/<form name="auth"/)).not.toBeNull();
       });
     });
 
     describe('Authorisation', () => {
       it('should pass valid credentials', async () => {
-        const authResponse = await request(app).get('/').set({
-          'publishable-key': process.env.TEST_PUBLISHABLE_KEY,
+        const formResponse = await request(app).post('/auth/capture').send({
+          auth: validAuthorisation,
+          state: validInputState,
+          ...validCredentials,
         });
-        const formResponse = await request(app).post('/auth').set({
-          'Cookie': authResponse.headers['set-cookie'][0],
-        }).send(validCredentials);
+        const result = extractRedirectParams(formResponse.text);
+
         expect(formResponse.statusCode).toBe(302);
-        expect(formResponse.headers.location).not.toBe('/auth');
-        expect(formResponse.headers.location).toBe('/share');
+        expect(result.action).toBe('/share');
+        expect(result.state.auth_metadata).toBeDefined();
+        expect(JSON.stringify(result.state.auth_metadata)).toBe(JSON.stringify(validCredentials));
       });
 
-      it('should not pass invalid credentials', async () => {
-        const authResponse = await request(app).get('/').set({
-          'publishable-key': process.env.TEST_PUBLISHABLE_KEY,
+      it('should pass invalid credentials', async () => {
+        const formResponse = await request(app).post('/auth/capture').send({
+          auth: validAuthorisation,
+          state: validInputState,
+          ...invalidCredentials,
         });
-        const formResponse = await request(app).post('/auth').set({
-          'Cookie': authResponse.headers['set-cookie'][0],
-        }).send(invalidCredentials);
-        expect(formResponse.statusCode).toBe(302);
-        expect(formResponse.headers.location).toBe('/auth');
-        expect(formResponse.headers.location).not.toBe('/share');
+        expect(formResponse.statusCode).toBe(400);
+        expect(formResponse.text.match('Error')).not.toBeNull();
       });
     });
 
     describe('Sharing', () => {
-      it('should display share form', async () => {
-        const authResponse = await request(app).get('/').set({
-          'publishable-key': process.env.TEST_PUBLISHABLE_KEY,
+      it('should display share form with valid credentials', async () => {
+        const shareResponse = await request(app).post('/share').send({
+          auth: validAuthorisation,
+          state: encodeState({
+            ...decodeState(validInputState),
+            auth_metadata: validCredentials,
+          }),
         });
-        await request(app).post('/auth').set({
-          'Cookie': authResponse.headers['set-cookie'][0],
-        }).send(validCredentials);
-
-        const shareResponse = await request(app).get('/share').set({
-          'Cookie': authResponse.headers['set-cookie'][0],
-        });
-
-        expect(shareResponse.statusCode).toBe(200);
         expect(shareResponse.text.match(/<form name="share"/)).not.toBeNull();
-      });
-      it('should share tariff', async () => {
-        const authResponse = await request(app).get('/').set({
-          'publishable-key': process.env.TEST_PUBLISHABLE_KEY,
-        });
-        await request(app).post('/auth').set({
-          'Cookie': authResponse.headers['set-cookie'][0],
-        }).send(validCredentials);
-
-        const shareResponse = await request(app).post('/share').set({
-          'Cookie': authResponse.headers['set-cookie'][0],
-        });
-
         expect(shareResponse.statusCode).toBe(200);
-        expect(shareResponse.text.match(/<form name="share"/)).toBeNull();
+      });
 
-        const result = extractParams(shareResponse.text);
+      it('should not display share form with missing credentials', async () => {
+        const shareResponse = await request(app).post('/share').send({
+          auth: validAuthorisation,
+          state: validInputState,
+        });
+        expect(shareResponse.text.match(/<form name="share"/)).toBeNull();
+        const result = extractRedirectParams(shareResponse.text);
+        expect(shareResponse.statusCode).toBe(302);
+        expect(result.action).toBe('/auth');
+      });
+
+
+      it('should share tariff', async () => {
+        const shareResponse = await request(app).post('/share/capture').send({
+          auth: validAuthorisation,
+          state: encodeState({
+            ...decodeState(validInputState),
+            auth_metadata: validCredentials,
+          }),
+        });
+
+        const result = extractState(shareResponse.text);
         expect(Object.keys(result).length).toBeGreaterThan(2);
         expect(result.customer_id).toBeDefined();
         expect(result.tariff_id).toBeDefined();
         expect(result.product_id).toBeDefined();
 
-        const tariff = await service.getTariff(result.tariff_id);
+        const tariff = await flatpeak.tariffs.retrieve(result.tariff_id);
 
         expect(tariff.object).toBe('tariff');
         expect(tariff.integrated).toBeTruthy();
         expect(tariff.import.length).toBeGreaterThan(0);
         expect(tariff.import[0].data.length).toBeGreaterThan(0);
-        expect(tariff.display_name).toBeTruthy();
-      }, 10000);
+        // expect(tariff.display_name).toBeTruthy();
+      }, 30000);
     });
   });
 

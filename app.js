@@ -1,16 +1,10 @@
+const path = require('path');
+require('dotenv').config({path: path.join(__dirname, '.env')});
 const createError = require('http-errors');
 const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
 const requestLogger = require('morgan');
 const {create} = require('express-handlebars');
-const sessions = require('express-session');
 const bodyParser = require('body-parser');
-const dotenv = require('dotenv');
-dotenv.config({
-  path: path.join(__dirname, '.env'),
-});
-
 const {integrateProvider, errorHandler} = require('@flat-peak/express-integration-sdk');
 const {authorise, capture, convert} = require('./modules/provider');
 const {logger} = require('./modules/logger/cloudwatch');
@@ -29,17 +23,8 @@ const hbs = create({
 app.engine('.hbs', hbs.engine);
 app.set('view engine', '.hbs');
 app.use(requestLogger('dev'));
-app.use(sessions({
-  secret: process.env.SESSION_SECRET,
-  saveUninitialized: true,
-  cookie: {
-    maxAge: 1000 * 60 * 10, // 10 min
-  },
-  resave: false,
-}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // The `integrateProvider` router attaches /, /auth, /share, /cancel

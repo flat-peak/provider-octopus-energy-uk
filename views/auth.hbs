@@ -4,20 +4,12 @@
 	<strong>NOTE:</strong> By submitting your details, you will be sharing them with <strong>{{{ManufacturerDisplayName}}}</strong>. Your data will be stored and processed in strict compliance with GDPR. Review full <a href="{{{ManufacturerPolicyUrl}}}">privacy policy</a>.
 </p>
 
-<form name="auth" class="form" action="/auth" method="post" style="--accent-color: {{{ProviderAccentColor}}}">
+<form name="auth" class="form" action="/auth/capture" method="post" style="--accent-color: {{{ProviderAccentColor}}}">
+    <input type="hidden" name="auth" value="{{{Authorisation}}}">
+    <input type="hidden" name="state" value="{{{SharedState}}}">
     <img src="{{{ProviderLogoUrl}}}" alt="" class="logo">
     <input type="email" name="email" placeholder="Email address" value="">
     <input type="password" autocapitalize="off" spellcheck="false" name="password" placeholder="Password" value="">
     <button type="submit">Submit</button>
 </form>
 
-<script>
-    window.addEventListener("load", function () {
-        window.requestAnimationFrame(() => {
-            const lastError = '{{{lastError}}}';
-            if (lastError) {
-                callback({object: 'error', type: 'api_error', message: lastError});
-            }
-        });
-    });
-</script>

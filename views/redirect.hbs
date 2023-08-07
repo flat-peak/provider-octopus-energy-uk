@@ -1,0 +1,9 @@
+<form name="redirect" method="post" action="{{{params.uri}}}">
+    <input type="hidden" name="auth" value="{{{params.auth}}}">
+    <input type="hidden" name="state" value="{{{params.state}}}">
+</form>
+<script>
+    window.addEventListener("load", function () {
+        document.querySelector('form[name=redirect]').submit();
+    });
+</script>
