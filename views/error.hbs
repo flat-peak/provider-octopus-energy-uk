@@ -12,15 +12,13 @@
             document.querySelector('form[name=callback]').submit();
         });
     </script>
-{{/if}}
-
-
+{{else}}
 <script>
     window.addEventListener("load", function () {
         window.requestAnimationFrame(() => {
             callback({
                 object: 'error',
-                type: 'integration_error',
+                type: 'Error.Integrations',
                 critical: true,
                 message: '{{{error}}}' || 'Something went wrong',
                 state: '{{{PublicState}}}'
@@ -28,3 +26,4 @@
         });
     });
 </script>
+{{/if}}

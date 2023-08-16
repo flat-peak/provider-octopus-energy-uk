@@ -8,8 +8,7 @@ window.addEventListener("load", function () {
     document.querySelector('form[name=callback]').submit();
 });
 </script>
-{{/if}}
-
+{{else}}
 <script>
     window.addEventListener("load", function () {
         window.requestAnimationFrame(() => {
@@ -17,3 +16,4 @@ window.addEventListener("load", function () {
         });
     });
 </script>
+{{/if}}
