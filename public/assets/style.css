@@ -1,11 +1,16 @@
 @font-face {
     font-family: 'SF Pro Display';
-    src: url(fonts/sf-pro-display/SFProDisplayBold.ttf);
+    src: url(https://static.flatpeak.energy/misc/fonts/SFProDisplayBold.ttf);
     font-weight: 700;
 }
 @font-face {
     font-family: 'SF Pro Display';
-    src: url(fonts/sf-pro-display/SFProDisplayRegular.ttf);
+    src: url(https://static.flatpeak.energy/misc/fonts/SFProDisplayMedium.ttf);
+    font-weight: 500;
+}
+@font-face {
+    font-family: 'SF Pro Display';
+    src: url(https://static.flatpeak.energy/misc/fonts/SFProDisplayRegular.ttf);
     font-weight: 400;
 }
 
