@@ -4,12 +4,34 @@
 	<strong>NOTE:</strong> By submitting your details, you will be sharing them with <strong>{{{ManufacturerDisplayName}}}</strong>. Your data will be stored and processed in strict compliance with GDPR. Review full <a href="{{{ManufacturerPolicyUrl}}}">privacy policy</a>.
 </p>
 
-<form name="auth" class="form" action="/auth/capture" method="post" style="--accent-color: {{{ProviderAccentColor}}}">
-    <input type="hidden" name="auth" value="{{{Authorisation}}}">
-    <input type="hidden" name="state" value="{{{SharedState}}}">
-    <img src="{{{ProviderLogoUrl}}}" alt="" class="logo">
-    <input type="email" name="email" placeholder="Email address" value="">
-    <input type="password" autocapitalize="off" spellcheck="false" name="password" placeholder="Password" value="">
-    <button type="submit">Submit</button>
-</form>
+<main class="form" style="--accent-color: {{{ProviderAccentColor}}}">
+    <form name="auth" action="/auth/capture" method="post">
+        <input type="hidden" name="auth" value="{{{Authorisation}}}">
+        <input type="hidden" name="state" value="{{{SharedState}}}">
+        <img src="{{{ProviderLogoUrl}}}" alt="" class="logo">
+        <input type="email" name="email" placeholder="Email address" value="">
+        <input type="password" autocapitalize="off" spellcheck="false" name="password" placeholder="Password" value="">
 
+        <div style="margin-top: 12px; text-align: right">
+            <a href="https://octopus.energy/forgotten-password/" target="_blank">Forgot my details</a>
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <div class="separator">- OR -</div>
+
+    <form name="setup" action="{{DefaultAssistedProviderUrl}}"  method="post">
+        <button type="submit" class="secondary-action">Enter manually</button>
+        <input type="hidden" name="auth" value="{{{Authorisation}}}">
+        <input type="hidden" name="state" value="{{{SharedState}}}">
+    </form>
+</main>
+
+<script>
+    window.addEventListener("load", function () {
+        const form = document.querySelector('form[name="setup"]');
+        form.action = "{{{CustomAssistedProviderUrl}}}" || "{{DefaultAssistedProviderUrl}}";
+        //form.submit();
+    });
+</script>

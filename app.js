@@ -4,6 +4,7 @@ const createError = require('http-errors');
 const express = require('express');
 const requestLogger = require('morgan');
 const {create} = require('express-handlebars');
+const Handlebars = require('handlebars');
 const bodyParser = require('body-parser');
 const {integrateProvider, errorHandler} = require('@flat-peak/express-integration-sdk');
 const {authorise, capture, convert} = require('./modules/provider');
@@ -56,9 +57,13 @@ app.use(integrateProvider({
     authorise: authorise,
     capture: capture,
     convert: convert,
-	logger: logger,
+    logger: logger,
   },
 }));
+
+Handlebars.registerHelper('DefaultAssistedProviderUrl', () => {
+  return process.env.ASSISTED_API_URL;
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
