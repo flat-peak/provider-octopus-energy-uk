@@ -80,18 +80,13 @@ a {
 }
 
 .form {
-    border: 1px solid #666666;
+    border: 1px solid var(--accent-color, #666666);
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     padding: 14px 16px 14px;
     margin-top: 25px;
 }
-.form > form {
-    display: flex;
-    flex-direction: column;
-}
-
 .form input {
     border: none;
     border-bottom: 1px solid #898989;
@@ -132,14 +127,6 @@ a {
 .form button[type=submit]:not(:first-child) {
     margin-top: 24px;
 }
-
-.form button[type=submit].secondary-action {
-    background-color: #e9e6e6;
-    /* font-size: 16px; */
-    color: #000000;
-}
-
-
 .form button[type=reset] {
     background: none;
     color: #000000;
@@ -169,12 +156,38 @@ p.additional {
     column-gap: 8px;
 }
 
-.separator {
-    margin: 12px 0;
-    text-align: center;
-    font-family: 'SF Pro Display';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
+.forgot-details {
+    margin-top: 16px;
+    text-align: center
 }
+
+.fallback-form {
+    padding: 24px 0;
+}
+
+button[type=submit].as-link {
+    background: none;
+    text-decoration: underline;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+
+.forgot-details {
+    margin-top: 16px;
+    text-align: center
+}
+
+.fallback-form {
+    padding: 24px 0;
+}
+
+button[type=submit].as-link {
+    background: none;
+    text-decoration: underline;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
