@@ -1,8 +1,4 @@
-<h1 class="title">Connect your account</h1>
-
-<p class="gdpr-description">
-	<strong>NOTE:</strong> By submitting your details, you will be sharing them with <strong>{{{ManufacturerDisplayName}}}</strong>. Your data will be stored and processed in strict compliance with GDPR. Review full <a href="{{{ManufacturerPolicyUrl}}}">privacy policy</a>.
-</p>
+<h1 class="title">Login to your account</h1>
 
 <main class="form" style="--accent-color: {{{ProviderAccentColor}}}">
     <form name="auth" action="/auth/capture" method="post">
@@ -12,21 +8,28 @@
         <input type="email" name="email" placeholder="Email address" value="">
         <input type="password" autocapitalize="off" spellcheck="false" name="password" placeholder="Password" value="">
 
-        <div style="margin-top: 12px; text-align: right">
-            <a href="https://octopus.energy/forgotten-password/" target="_blank">Forgot my details</a>
-        </div>
+        <p class="gdpr-description">
+            By logging in, you will share your details with <strong>{{{ManufacturerDisplayName}}}</strong>. Review the full <a href="{{{ManufacturerPolicyUrl}}}">privacy policy</a> before continuing.
+        </p>
 
-        <button type="submit">Submit</button>
+        <button type="submit">Login</button>
+
+    <div style="margin-top: 16px; text-align: center">
+        <a href="https://octopus.energy/forgotten-password/" target="_blank">I've forgotten my password</a>
+    </div>
+
     </form>
 
-    <div class="separator">- OR -</div>
+</main>
 
+<p style="padding-top: 5px;">
     <form name="setup" action="{{DefaultAssistedProviderUrl}}"  method="post">
-        <button type="submit" class="secondary-action">Enter manually</button>
+        <span>If you don't know your login details or don't like to provide them you can also</span>
+        <input style="text-decoration: underline;" type="url" onclick="{{DefaultAssistedProviderUrl}}" value="Set your tariff manually">
         <input type="hidden" name="auth" value="{{{Authorisation}}}">
         <input type="hidden" name="state" value="{{{SharedState}}}">
     </form>
-</main>
+</p>
 
 <script>
     window.addEventListener("load", function () {
