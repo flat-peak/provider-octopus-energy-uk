@@ -1,5 +1,11 @@
-<h1 class="title">Error</h1>
-<p class="description">{{{error}}}</p>
+<section class="error" style="--accent-color: {{{ProviderAccentColor}}}">
+    <h1 class="error__title">Error</h1>
+    <p class="error__description">
+        {{{error}}}
+    </p>
+</section>
+
+
 
 {{#if callbackUrl}}
     <form name="callback" method="post" action="{{{callbackUrl}}}">
