@@ -234,3 +234,9 @@ p.error__description {
     line-height: 20px;
     text-align: center;
 }
+
+.error-message {
+    text-align: center;
+    padding: 6px;
+    color: #ff0033;
+}

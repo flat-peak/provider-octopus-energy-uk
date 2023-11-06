@@ -6,6 +6,10 @@
     <input type="email" name="email" placeholder="Email address" value="">
     <input type="password" autocapitalize="off" spellcheck="false" name="password" placeholder="Password" value="">
 
+    {{#if error}}
+        <div class="error-message">Login failed. {{{error}}}</div>
+    {{/if}}
+
     <p class="gdpr-description">
         By logging in, you will share your details with <strong>{{{ManufacturerDisplayName}}}</strong>. Review the full <a href="{{{ManufacturerPolicyUrl}}}">privacy policy</a> before continuing.
     </p>
