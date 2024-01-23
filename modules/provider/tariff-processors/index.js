@@ -1,6 +1,7 @@
 const {processHalfHourlyTariff} = require('./half-hourly');
 const {logger} = require('../../logger/cloudwatch');
 const {processStandardTariff} = require('./standard');
+const {processDayNightTariff} = require('./day-night');
 
 const processTariff = (providerTariff) => {
   switch (providerTariff.__typename) {
@@ -8,6 +9,8 @@ const processTariff = (providerTariff) => {
       return processStandardTariff(providerTariff);
     case 'HalfHourlyTariff':
       return processHalfHourlyTariff(providerTariff);
+    case 'DayNightTariff':
+      return processDayNightTariff(providerTariff);
     default:
       throw new Error('Unknown tariff type: ' + providerTariff.__typename);
   }
