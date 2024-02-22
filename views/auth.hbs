@@ -1,7 +1,5 @@
 <h1 class="title">Login to your account</h1>
-<form class="form" style="--accent-color: {{{ProviderAccentColor}}}" name="auth" action="/auth/capture" method="post">
-    <input type="hidden" name="auth" value="{{{Authorisation}}}">
-    <input type="hidden" name="state" value="{{{SharedState}}}">
+<form class="form" style="--accent-color: {{{ProviderAccentColor}}}" name="auth" action="/auth/capture?state={{{SharedState}}}" method="post">
     <img src="{{{ProviderLogoUrl}}}" alt="" class="logo">
     <input type="email" name="email" placeholder="Email address" value="">
     <input type="password" autocapitalize="off" spellcheck="false" name="password" placeholder="Password" value="">
