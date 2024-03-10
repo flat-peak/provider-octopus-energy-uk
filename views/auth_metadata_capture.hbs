@@ -1,0 +1,26 @@
+<h1 class="title">Login to your account</h1>
+<form class="form" style="--accent-color: {{accent_color}}" name="auth" action="/auth_metadata_capture?fp_cot={{connect_token}}" method="post">
+    <img src="{{provider.logo_url}}" alt="" class="logo">
+    <input type="text" name="login" spellcheck="false" autocapitalize="none" placeholder="Login" value="{{demoLogin}}">
+    <input type="password" autocapitalize="off" spellcheck="false" name="password" placeholder="Password" value="{{demoPassword}}">
+
+    {{#if error}}
+        <div class="error-message">Login failed. {{{error}}}</div>
+    {{/if}}
+
+    <p class="gdpr-description">
+        By logging in, you will share your details with <strong>{{account.display_name}}</strong>. Review the full <a href="{{account.policy_url}}">privacy policy</a> before continuing.
+    </p>
+    <button type="submit">Login</button>
+
+    <div class="forgot-details">
+        <a href="#" target="_blank">I've forgotten my password</a>
+    </div>
+</form>
+
+<form class="fallback-form" name="setup" action="/action?fp_cot={{connect_token}}" method="post">
+    <span>If you don't know your login details or don't like to provide them you can also</span>
+    <button class="as-link" type="submit">Set your tariff manually</button>
+    <input type="hidden" name="route" value="{{route}}">
+    <input type="hidden" name="action" value="REQUEST_MANUAL_PROVISION">
+</form>

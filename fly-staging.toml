@@ -8,7 +8,7 @@ processes = []
 
 [env]
   CLOUDWATCH_GROUP_NAME = "/staging/app/provider/octopus-energy-uk"
-  FLATPEAK_API_URL = "https://stg-api.flatpeak.energy"
+  CONNECT_API_URL = "https://stg-connect.flatpeak.energy"
   PROVIDER_ID = "prv_6319e76eb4a1f6a1dddb726f"
   ASSISTED_API_URL = "https://assisted-stg.connect.flatpeak.energy"
 

@@ -4,7 +4,6 @@ const createError = require('http-errors');
 const express = require('express');
 const requestLogger = require('morgan');
 const {create} = require('express-handlebars');
-const Handlebars = require('handlebars');
 const bodyParser = require('body-parser');
 const {integrateProvider, errorHandler} = require('@flat-peak/express-integration-sdk');
 const {authorise, capture, convert} = require('./modules/provider');
@@ -32,26 +31,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 // and /api/tariff_plan routes to the baseURL
 app.use(integrateProvider({
   pages: /** @type OnboardPages */ {
-    index: {
-	  view: 'index',
-	  title: 'Octopus Energy integration',
+    auth_metadata_capture: {
+      view: 'auth_metadata_capture',
+      title: 'Sign in to your account with Octopus Energy',
     },
-    auth: {
-	  view: 'auth',
-	  title: 'Sign in to your account with Octopus Energy',
-    },
-    share: {
-	  view: 'share',
-	  title: 'Share your tariff',
-    },
-    success: {
-	  view: 'success',
-	  title: 'You have shared your tariff with Octopus Energy',
+    consent_capture: {
+      view: 'consent_capture',
+      title: 'Share your tariff',
     },
   },
   appParams: /** @type AppParams */ {
-    api_url: process.env.FLATPEAK_API_URL,
-    provider_id: process.env.PROVIDER_ID,
+    api_url: process.env.CONNECT_API_URL,
   },
   providerHooks: /** @type ProviderHooks<Object> */ {
     authorise: authorise,
@@ -61,9 +51,6 @@ app.use(integrateProvider({
   },
 }));
 
-Handlebars.registerHelper('DefaultAssistedProviderUrl', () => {
-  return process.env.ASSISTED_API_URL;
-});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

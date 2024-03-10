@@ -13,7 +13,7 @@ const viewerQuery = fs.readFileSync(path.resolve(__dirname, 'graphql/viewer.grap
 
 const isNotEmptyArray = (object) => Array.isArray(object) && object.length;
 
-const authorise = async ({email, password}) => {
+const authorise = async ({login: email, password}) => {
   const resp = await fetch(API_URL, {
     method: 'POST',
     headers: {
