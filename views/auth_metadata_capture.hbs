@@ -1,26 +1,57 @@
-<h1 class="title">Login to your account</h1>
-<form class="form" style="--accent-color: {{accent_color}}" name="auth" action="/auth_metadata_capture?fp_cot={{connect_token}}" method="post">
-    <img src="{{provider.logo_url}}" alt="" class="logo">
-    <input type="text" name="login" spellcheck="false" autocapitalize="none" placeholder="Login" value="{{demoLogin}}">
-    <input type="password" autocapitalize="off" spellcheck="false" name="password" placeholder="Password" value="{{demoPassword}}">
+<div class="viewport theme-light" style="--accent-color: {{accent_color}}">
+    <div class="viewport__wrapper">
+        <header class="header">
+            <div class="header__logo">
+                <img src="{{provider.logo_url}}" alt="">
+            </div>
+        </header>
+        <article class="content">
+            <main class="main">
+                <div class="main__wrapper">
+                    <div class="main__heading">
+                        <h1 class="title">Connect your account</h1>
+                    </div>
 
-    {{#if error}}
-        <div class="error-message">Login failed. {{{error}}}</div>
-    {{/if}}
+                    <p class="main__intro">
+                        By submitting your details, you will be sharing them with <strong>{{account.display_name}}</strong>. All data will be stored and processed in compliance with GDPR. View full  <a href="{{account.policy_url}}">data protection policy</a>.
+                    </p>
 
-    <p class="gdpr-description">
-        By logging in, you will share your details with <strong>{{account.display_name}}</strong>. Review the full <a href="{{account.policy_url}}">privacy policy</a> before continuing.
-    </p>
-    <button type="submit">Login</button>
+                    <form class="form" id="auth" action="/auth_metadata_capture?fp_cot={{connect_token}}" method="post">
 
-    <div class="forgot-details">
-        <a href="#" target="_blank">I've forgotten my password</a>
+                    <fieldset class="fieldset">
+                        <div class="text-field">
+                            <input id="login-input" class="text-field__input" type="text" name="login" spellcheck="false" autocapitalize="none" placeholder="Login" value="{{demoLogin}}">
+                            <label for="login-input" class="text-field__label">Login</label>
+                        </div>
+                        <div class="text-field">
+                            <input id="password-input" class="text-field__input" type="password" autocapitalize="off" spellcheck="false" name="password" placeholder="Password" value="{{demoPassword}}">
+                            <label for="password-input" class="text-field__label">Password</label>
+                        </div>
+                    </fieldset>
+                    {{#if error}}
+                        <div class="error-message">Login failed. {{{error}}}</div>
+                    {{/if}}
+                    </form>
+                </div>
+            </main>
+
+            <footer class="footer">
+                <button type="submit" form="auth" class="button--primary">Login</button>
+
+<!--                <div class="forgot-details">-->
+<!--                    <a href="#" target="_blank">Forgot my details</a>-->
+<!--                </div>-->
+
+                <form class="footer__disclaimer" name="setup" action="/action?fp_cot={{connect_token}}" method="post">
+                    <span>If you don't know your login details or don't like to provide them you can also</span>
+                    <button class="button--as-link" type="submit">Set your tariff manually</button>
+                    <input type="hidden" name="route" value="{{route}}">
+                    <input type="hidden" name="action" value="DISMISS_DIRECT">
+                </form>
+            </footer>
+
+
+        </article>
     </div>
-</form>
+</div>
 
-<form class="fallback-form" name="setup" action="/action?fp_cot={{connect_token}}" method="post">
-    <span>If you don't know your login details or don't like to provide them you can also</span>
-    <button class="as-link" type="submit">Set your tariff manually</button>
-    <input type="hidden" name="route" value="{{route}}">
-    <input type="hidden" name="action" value="REQUEST_MANUAL_PROVISION">
-</form>

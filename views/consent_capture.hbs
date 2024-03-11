@@ -1,38 +1,45 @@
-<h1 class="title">Data sharing consent</h1>
-
-<form name="reset" action="/action?fp_cot={{connect_token}}" method="post" style="display: none">
+<form id="deny" action="/action?fp_cot={{connect_token}}" method="post" style="display: none">
     <input type="hidden" name="route" value="{{route}}">
-    <input type="hidden" name="action" value="REQUEST_MANUAL_PROVISION">
+    <input type="hidden" name="action" value="DISMISS_DIRECT">
 </form>
 
-<form name="share" class="form" action="/consent_capture?fp_cot={{connect_token}}" method="post" style="--accent-color: {{accent_color}}">
+<form id="allow" class="form" action="/consent_capture?fp_cot={{connect_token}}" method="post">
     <input type="hidden" name="auth_metadata_id" value="{{auth_metadata_id}}">
-
-    <img src="{{provider.logo_url}}" alt="" class="logo">
-
-    <p><strong>{{account.display_name}}</strong> wants to access your account with {{provider.display_name}}</p>
-
-    <div class="share-disclaimer">
-        <p> This will allow them to view your:</p>
-        <ul>
-            <li>Electricity tariff(s)</li>
-            <li>Email and postal address</li>
-            <li>Account number</li>
-        </ul>
-
-        <p>Make sure that you know who they are.</p>
-
-        <p class="additional">You may be sharing sensitive info with this site or app.  Learn about how {{account.display_name}} will handle your data by reviewing their <a href="{{account.policy_url}}">privacy policy</a> and <a href="{{account.terms_url}}">terms of service</a>. You can always see or remove access by contacting support</p>
-    </div>
-
-    <div class="buttons">
-        <button type="reset">Cancel</button>
-        <button type="submit">Allow</button>
-    </div>
-
-    <script>
-        document.querySelector('form[name="share"]').addEventListener('reset', () => {
-            document.querySelector('form[name="reset"]').submit();
-        });
-    </script>
 </form>
+
+<div class="viewport theme-light" style="--accent-color: {{accent_color}}">
+    <div class="viewport__wrapper">
+        <header class="header">
+            <div class="header__logo">
+                <img src="{{provider.logo_url}}" alt="">
+            </div>
+        </header>
+        <article class="content">
+            <main class="main">
+                <div class="main__wrapper">
+                    <div class="main__heading">
+                        <h1 class="title">Data sharing consent</h1>
+                    </div>
+                    <div class="main__intro">
+                        <div class="text-accent">
+                            <p><strong>{{account.display_name}}</strong> wants to access your account. This will allow them to:</p>
+                            <br/>
+                            <ul>
+                                <li>View your electricity tariff</li>
+                                <li>View your email and postal address</li>
+                            </ul>
+                            <br/>
+                            <p>Make sure that you know who they are.</p>
+                        </div>
+                        <br/>
+                        <p>Learn about how <strong>{{account.display_name}}</strong> will handle your data by reviewing their <a href="{{account.policy_url}}">data protection policy</a> and <a href="{{account.terms_url}}">terms of service</a>.</p>
+                    </div>
+                </div>
+            </main>
+            <footer class="footer">
+                <button type="submit" form="allow" class="button--primary">Allow</button>
+                <button type="submit" form="deny" class="button--as-link">Deny</button>
+            </footer>
+        </article>
+    </div>
+</div>
