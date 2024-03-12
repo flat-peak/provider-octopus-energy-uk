@@ -21,13 +21,12 @@ const convert = ({agreement, tariff_code, reference_id}) => {
     return Object.assign({
       'object': 'tariff',
       'display_name': agreement.tariff.displayName,
-      'reference_id': reference_id,
-      'integrated': true,
-      'product_id': undefined,
       'timezone': 'Europe/London',
-      'time_expiry': undefined,
-      'import': undefined,
-      'export': undefined,
+      'integration_instance': 'OCTOPUS_ENERGY_UK',
+      'provider_tariff_reference': reference_id,
+      'provider_tariff_expiry_date': undefined,
+      'connection_type': 'DIRECT',
+      'direction': 'IMPORT',
     }, processTariff(agreement.tariff));
   } catch (e) {
     logger.error(`Can't adopt a tariff ${JSON.stringify(agreement)}`);

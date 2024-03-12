@@ -14,7 +14,7 @@ const processHalfHourlyTariff = (providerTariff) => {
           acc.push({
             fromTime: calcSeconds(secondsFrom, minutesFrom, hoursFrom),
             data: {
-              cost: exactMath.div(rate.value, 100),
+              rate: [{value: exactMath.floor(exactMath.div(rate.value, 100), -2)}],
               valid_from: [hoursFrom, minutesFrom, secondsFrom].join(':'),
               valid_to: [hoursTo, minutesTo, secondsTo].join(':'),
             },
@@ -23,14 +23,14 @@ const processHalfHourlyTariff = (providerTariff) => {
           acc.push({
             fromTime: calcSeconds(secondsFrom, minutesFrom, hoursFrom),
             data: {
-              cost: exactMath.div(rate.value, 100),
+			  rate: [{value: exactMath.floor(exactMath.div(rate.value, 100), -2)}],
               valid_from: [hoursFrom, minutesFrom, secondsFrom].join(':'),
               valid_to: '00:00:00',
             },
           }, {
             fromTime: 0,
             data: {
-              cost: exactMath.div(rate.value, 100),
+              rate: [{value: exactMath.floor(exactMath.div(rate.value, 100), -2)}],
               valid_from: '00:00:00',
               valid_to: [hoursTo, minutesTo, secondsTo].join(':'),
             },
@@ -44,25 +44,20 @@ const processHalfHourlyTariff = (providerTariff) => {
       .map((rate) => rate.data);
 
   return {
-    'time_expiry': new Date(providerTariff.unitRates[providerTariff.unitRates.length - 1].validTo).toISOString(),
-    'import': [
+    'provider_tariff_expiry_date': new Date(providerTariff.unitRates[providerTariff.unitRates.length - 1].validTo).toISOString(),
+    'data': [
       {
-        'data': [
+        'days_and_hours': [
           {
-            'days_and_hours': [
-              {
-                'days': [
-                  'All',
-                ],
-                'hours': hours,
-              },
-            ],
-            'months': [
+            'days': [
               'All',
             ],
+            'hours': hours,
           },
         ],
-        'type': 'weekday',
+        'months': [
+          'All',
+        ],
       },
     ],
   };
